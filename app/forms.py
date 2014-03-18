@@ -27,6 +27,46 @@ class AlbumReviewFormDelete(Form):
     pass
 
 
+class TrackReviewForm(Form):
+    artist = TextField('Artist', validators=[Required()])
+    album = TextField('Album', validators=[Required()])
+    name = TextField('Name', validators=[Required()])
+    upload = FileField('Image', validators=[
+        FileRequired(),
+        FileAllowed(['jpg', 'png'], 'Images only!')
+    ])
+    content = TextAreaField('Content', validators=[Required()])
+
+
+class TrackReviewFormEdit(Form):
+    artist = TextField('Artist', validators=[Required()])
+    album = TextField('Album', validators=[Required()])
+    name = TextField('Name', validators=[Required()])
+    content = TextAreaField('Content', validators=[Required()])
+
+
+class TrackReviewFormDelete(Form):
+    pass
+
+
+class ArtistReviewForm(Form):
+    artist = TextField('Artist', validators=[Required()])
+    upload = FileField('Image', validators=[
+        FileRequired(),
+        FileAllowed(['jpg', 'png'], 'Images only!')
+    ])
+    content = TextAreaField('Content', validators=[Required()])
+
+
+class ArtistReviewFormEdit(Form):
+    artist = TextField('Artist', validators=[Required()])
+    content = TextAreaField('Content', validators=[Required()])
+
+
+class ArtistReviewFormDelete(Form):
+    pass
+
+
 class NewsForm(Form):
     title = TextField('Title', validators=[Required()])
     preview = TextField('Preview', validators=[Required()])

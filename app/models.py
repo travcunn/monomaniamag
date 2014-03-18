@@ -64,6 +64,20 @@ class TrackReview(db.Model):
         return '<TrackReview %r>' % (self.name)
 
 
+class ArtistReview(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    artist = db.Column(db.String(120))
+    photo = db.Column(db.String)
+    content = db.Column(db.String)
+    pub_date = db.Column(db.DateTime)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    page_title = db.Column(db.String)
+    url = db.Column(db.String)
+
+    def __repr__(self):
+        return '<ArtistReview %r>' % (self.album)
+
+
 class Article(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     page_title = db.Column(db.String(120), unique=True)
