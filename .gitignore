@@ -1,0 +1,13 @@
+#python specific
+*.pyc
+*.settings
+*~
+.project
+.pydevproject
+*.db
+
+installer_windows
+
+#vim swp files
+*.swo
+*.swp

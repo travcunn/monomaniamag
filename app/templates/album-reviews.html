@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="row">
+    <div class="col-lg-8">
+        <h2>Album Reviews</h2>
+    </div>
+
+
+{% if g.user != None and g.user.is_authenticated() %}
+    <div class="col-lg-4">
+        <div class="pull-right" style="padding-top:25px;">
+        <a href="{{ url_for('add_new_album_review') }}">
+        <button type="button" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span>
+            Add New Album Review
+        </button>
+        </a>
+        </div>
+    </div>
+{% endif %}
+
+</div>
+
+<div id="reviews" class="row">
+    {% for review in reviews.items %}
+<div class="item col-md-4 col-sm-6 col-xs-12">
+<ul class="timeline">
+<li>
+    <div class="timeline-panel">
+    <div class="timeline-heading">
+        <a href="{{ url_for('single_album_review', review_url=review.url) }}">
+            <img class="img-responsive" src="/static/reviews/{{ review.photo}}" />
+        <span class="post-title">
+            <b>{{ review.page_title }}</b><br>
+            <b>by {{ review.author.realname }}</b>
+    </span>
+        </a>
+    </div>
+
+    <div class="timeline-footer">
+        <a><i class="glyphicon glyphicon-thumbs-up"></i></a>
+        <a><i class="glyphicon glyphicon-share"></i></a>
+        <a class="pull-right" href="{{ url_for('single_album_review', review_url=review.url) }}">Continue Reading</a>
+    </div>
+    </div>
+</li>
+</ul>
+</div>
+{% endfor %}
+</div> <!-- end row -->
+
+<div class="row">
+    <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3">
+<ul class="pager">
+{% if reviews.has_prev %}<li class="previous"><a href="{{ url_for('reviews', page=reviews.prev_num) }}">&larr; Newer Reviews</a></li>{% endif %}
+{% if reviews.has_next %}<li class="next"><a href="{{ url_for('reviews', page=reviews.next_num) }}">Older Reviews &rarr;</a></li>{% endif %}
+</ul>
+</div>
+</div>
+
+{% endblock %}

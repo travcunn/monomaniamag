@@ -1,0 +1,59 @@
+from flask.ext.wtf import Form
+from flask_wtf.file import FileField, FileAllowed, FileRequired
+from wtforms import BooleanField, TextAreaField, TextField
+from wtforms.validators import Required
+
+from app import db
+from models import User
+
+
+class AlbumReviewForm(Form):
+    artist = TextField('Artist', validators=[Required()])
+    album = TextField('Album', validators=[Required()])
+    upload = FileField('Image', validators=[
+        FileRequired(),
+        FileAllowed(['jpg', 'png'], 'Images only!')
+    ])
+    content = TextAreaField('Content', validators=[Required()])
+
+
+class AlbumReviewFormEdit(Form):
+    artist = TextField('Artist', validators=[Required()])
+    album = TextField('Album', validators=[Required()])
+    content = TextAreaField('Content', validators=[Required()])
+
+
+class AlbumReviewFormDelete(Form):
+    pass
+
+
+class NewsForm(Form):
+    title = TextField('Title', validators=[Required()])
+    preview = TextField('Preview', validators=[Required()])
+    featured = BooleanField('Featured')
+    upload = FileField('Image', validators=[
+        FileRequired(),
+        FileAllowed(['jpg', 'png'], 'Images only!')
+    ])
+    content = TextAreaField('Content', validators=[Required()])
+
+
+class LoginValidator(object):
+    def __init__(self, username, password):
+        self.__username = username
+        self.__password = password
+
+    @property
+    def is_valid(self):
+        user = self.lookup_user
+        if user is None:
+            return False
+
+        if user.password != self.__password:
+            return False
+
+        return True
+
+    @property
+    def lookup_user(self):
+        return db.session.query(User).filter_by(email=self.__username).first()
