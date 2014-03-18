@@ -1,0 +1,7 @@
+[run]
+omit =
+    tests.py
+    app/db_repository/*
+include =
+    app/core/*.py
+    app/sync/*.py
