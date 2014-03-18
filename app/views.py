@@ -175,7 +175,7 @@ def single_track_review(review_url):
                            delete_form=delete_form)
 
 @app.route('/reviews/artist/<review_url>')
-def artist_track_review(review_url):
+def single_artist_review(review_url):
     review = ArtistReview.query.filter_by(url=review_url).first()
     if review is None:
         abort(404)
@@ -186,7 +186,7 @@ def artist_track_review(review_url):
 
     delete_form = ArtistReviewFormDelete()
 
-    return render_template('arist-review.html', title=review.page_title,
+    return render_template('artist-review.html', title=review.page_title,
                            review=review, side_reviews=shown_side_reviews,
                            delete_form=delete_form)
 
@@ -253,7 +253,7 @@ def track_review_action(review_url, action):
                 review.artist = form.artist.data
                 review.album = form.album.data
                 review.content = form.content.data
-		review.name = form.name.data
+                review.name = form.name.data
 
                 review_title = "%s - %s" % (form.artist.data, form.track.data)
                 url_base = "%s %s" % (form.artist.data, form.track.data)
