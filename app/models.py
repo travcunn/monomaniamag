@@ -78,7 +78,7 @@ class ArtistReview(db.Model):
     url = db.Column(db.String)
 
     def __repr__(self):
-        return '<ArtistReview %r>' % (self.album)
+        return '<ArtistReview %r>' % (self.artist)
 
 
 class Article(db.Model):
@@ -93,7 +93,7 @@ class Article(db.Model):
     url = db.Column(db.String)
 
     def __repr__(self):
-        return '<Article %r>' % (self.title)
+        return '<Article %r>' % (self.page_title)
 
 
 class Video(db.Model):

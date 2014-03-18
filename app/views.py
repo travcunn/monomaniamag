@@ -25,6 +25,16 @@ login_manager.login_view = 'login'
 
 @app.route('/')
 def home():
+
+    first_featured = Article.query.options(defer('content'))
+    one_featured = first_featured.order_by(Article.pub_date.desc()).first()
+
+    featured_articles = Article.query.options(defer('content'))
+    filtered_featured = featured_articles.filter_by(featured=True)
+    ordered_featured_articles = \
+            filtered_featured.order_by(Article.pub_date.desc())
+    featured_news = ordered_featured_articles.slice(1, 3).all()
+
     news_articles = Article.query.options(defer('content'))
     ordered_articles = news_articles.order_by(Article.pub_date.desc())
     panel_news = ordered_articles.paginate(0, 4, False)
@@ -52,6 +62,8 @@ def home():
                            panel_album_reviews=panel_album_reviews,
                            panel_track_reviews=panel_track_reviews,
                            panel_artist_reviews=panel_artist_reviews,
+                           one_featured=one_featured,
+                           featured_news=featured_news,
                            news=panel_news)
 
 @app.route('/news')
@@ -59,7 +71,7 @@ def news():
     album_reviews = Article.query.options(defer('content'))
 
     ordered_reviews = album_reviews.order_by(Article.pub_date.desc())
-    panel_album_reviews = ordered_reviews.paginate(0, 4, False)
+    panel_album_reviews = ordered_reviews.paginate(0, 9, False)
 
     return render_template('news.html', news=panel_album_reviews)
 

@@ -23,14 +23,14 @@
         <div class="row">
                 <!--  for article -->
                 {% for article in news.items %}
-                <div class="col-md-4 col-sm-4 col-xs-12">
-                <div class="front-review">
-                    <div class="col-sm-4">
+                <div class="col-md-4 col-sm-6 col-xs-12">
+                <div class="news-item">
+                    <div class="col-sm-5">
                         <a href="{{ url_for('single_news_article', article_url=article.url) }}">
                         <img class="img-responsive" src="/static/news/{{ article.photo }}">
                         </a>
                     </div>
-                    <div class="col-sm-8">
+                    <div class="col-sm-7">
                         <div class="side-review">
                             <a href="{{ url_for('single_news_article', article_url=article.url)}}">
                                 <p><small>{{ article.page_title }}</small></p>

@@ -127,3 +127,7 @@ a.thumbnail:hover {
 .front-review {
   margin-top: 10px;
 }
+.news-item {
+  margin-left: -20px;
+  margin-right: -20px;
+}

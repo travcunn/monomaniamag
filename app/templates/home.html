@@ -16,28 +16,25 @@
                 </ol>
                 <div class="carousel-inner">
                     <div class="item active">
-                        <a href="/articles/2014/john-mayer-interview">
-                            <img src="http://placehold.it/600x500&text=." alt="Drop The Anchor">
+                        <a href="{{ url_for('single_news_article', article_url=one_featured.url) }}">
+                            <img src="/static/news/{{ one_featured.photo }}" alt="{{ one_featured.page_title }}">
                             <div class="carousel-caption">
-                                <h3>John Mayer Exclusive Interview</h3>
-                                <p>including talk of new music and inspiration from 2014</p>
+                                <h3>{{ one_featured.page_title }}</h3>
+                                <p>{{ one_featured.preview }}</p>
                             </div>
                         </a>
                     </div>
+                    {% for article in featured_news %}
                     <div class="item">
-                        <a href="/articles/2014/john-mayer-interview">
-                            <img src="http://placehold.it/600x500&text=." alt="Chin Up Kid">
+                        <a href="{{ url_for('single_news_article', article_url=article.url) }}">
+                            <img src="/static/news/{{ article.photo }}" alt="{{ article.page_title }}">
                             <div class="carousel-caption">
-                                <h3>Drop The Anchor Album Release</h3>
-                                <p></p>
+                                <h3>{{ article.page_title }}</h3>
+                                <p>{{ article.preview }}</p>
                             </div>
                         </a>
                     </div>
-                    <div class="item">
-                        <a href="/articles/2014/john-mayer-interview">
-                            <img src="http://placehold.it/600x500&text=." alt="Fi">
-                        </a>
-                    </div> <!-- end item -->
+                    {% endfor %}
                 </div><!-- end carousel-inner -->
             </div><!-- end carousel-example-generic -->
         </div> <!-- end panel -- >
