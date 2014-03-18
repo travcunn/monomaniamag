@@ -14,6 +14,8 @@ class User(db.Model):
 
     album_reviews = db.relationship('AlbumReview', backref='author',
                                     lazy='dynamic')
+    artist_reviews = db.relationship('ArtistReview', backref='author',
+                                    lazy='dynamic')
     track_reviews = db.relationship('TrackReview', backref='author',
                                     lazy='dynamic')
     articles = db.relationship('Article', backref='author', lazy='dynamic')
@@ -58,6 +60,7 @@ class TrackReview(db.Model):
     content = db.Column(db.String)
     pub_date = db.Column(db.DateTime)
     author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    page_title = db.Column(db.String)
     url = db.Column(db.String)
 
     def __repr__(self):

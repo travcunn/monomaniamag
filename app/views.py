@@ -90,6 +90,10 @@ def single_news_article(article_url):
                            review=review, side_reviews=shown_side_reviews,
                            delete_form=delete_form)
 
+@app.route('/reviews')
+def reviews():
+    return "test reviews page"
+
 @app.route('/reviews/album')
 @app.route('/reviews/album/page/<int:page>', methods = ['GET', 'POST'])
 def album_reviews(page=1):
@@ -300,7 +304,7 @@ def artist_review_action(review_url, action):
                 review.artist = form.artist.data
                 review.album = form.album.data
                 review.content = form.content.data
-		review.name = form.name.data
+                review.name = form.name.data
 
                 review_title = "%s" % (form.artist.data)
                 url_base = "%s" % (form.artist.data)
@@ -387,10 +391,11 @@ def add_new_track_review():
         review_url = url_base.replace(" ", "-").lower()
 
         review = TrackReview(artist=form.artist.data, album=form.album.data,
-                             photo=filename, content=form.content.data,
+                             name=form.name.data, photo=filename,
+                             content=form.content.data,
+                             pub_date=datetime.datetime.utcnow(),
                              author=g.user, page_title=review_title,
-                             url=review_url, name=form.name.data,
-                             pub_date=datetime.datetime.utcnow())
+                             url=review_url)
         db.session.add(review)
         db.session.commit()
         flash('The track review was created and published.')
@@ -415,11 +420,12 @@ def add_new_artist_review():
         url_base = "%s Artist Review" % (form.artist.data)
         review_url = url_base.replace(" ", "-").lower()
 
-        review = ArtistReview(artist=form.artist.data, album=form.album.data,
-                             photo=filename, content=form.content.data,
-                             author=g.user, page_title=review_title,
-                             url=review_url, name=form.name.data,
-                             pub_date=datetime.datetime.utcnow())
+        review = ArtistReview(artist=form.artist.data,
+                              photo=filename, content=form.content.data,
+                              page_title=review_title,
+                              url=review_url,
+                              pub_date=datetime.datetime.utcnow(),
+                              author=g.user)
         db.session.add(review)
         db.session.commit()
         flash('The artist review was created and published.')
