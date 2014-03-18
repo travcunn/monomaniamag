@@ -204,8 +204,10 @@ def album_review_action(review_url, action):
                 review.album = form.album.data
                 review.content = form.content.data
 
-                review_title = "%s - %s" % (form.artist.data, form.album.data)
-                url_base = "%s %s" % (form.artist.data, form.album.data)
+                review_title = "%s - %s - Album Review" % (form.artist.data,
+                                                         form.album.data)
+                url_base = "%s %s Album Review" % (form.artist.data,
+                                                   form.album.data)
                 review_url = url_base.replace(" ", "-").lower()
                 review.page_title = review_title
                 review.url = review_url
@@ -227,7 +229,11 @@ def album_review_action(review_url, action):
                 img_path = os.path.join(app.config['BASEDIR'],
                                         'static/reviews/',
                                         review.photo)
-                os.remove(img_path)
+                try:
+                    os.remove(img_path)
+                except OSError:
+                    # the file is already deleted
+                    pass
 
                 db.session.delete(review)
                 db.session.commit()
@@ -236,57 +242,6 @@ def album_review_action(review_url, action):
                 return redirect(url_for('album_reviews'))
             else:
                 return redirect(url_for('single_album_review',
-                                        review_url=review.url))
-        else:
-            abort(404)
-
-@app.route('/reviews/track/<review_url>/<action>', methods=['GET', 'POST'])
-def track_review_action(review_url, action):
-    review = TrackReview.query.filter_by(url=review_url).first()
-    if review is None:
-        abort(404)
-
-    if action == "edit":
-        form = TrackReviewFormEdit()
-        if request.method == 'POST':
-            if form.validate_on_submit():
-                review.artist = form.artist.data
-                review.album = form.album.data
-                review.content = form.content.data
-                review.name = form.name.data
-
-                review_title = "%s - %s" % (form.artist.data, form.track.data)
-                url_base = "%s %s" % (form.artist.data, form.track.data)
-                review_url = url_base.replace(" ", "-").lower()
-                review.page_title = review_title
-                review.url = review_url
-
-                db.session.commit()
-
-                flash('Saved successfully.', 'success')
-                return redirect(url_for('single_track_review',
-                                        review_url=review.url))
-
-        return render_template('edit-track-review.html', title="Edit Review",
-                               review=review, form=form)
-
-    elif action == "delete":
-        form = TrackReviewFormDelete()
-        if request.method == 'POST':
-            if form.validate_on_submit():
-                # delete the review image
-                img_path = os.path.join(app.config['BASEDIR'],
-                                        'static/reviews/',
-                                        review.photo)
-                os.remove(img_path)
-
-                db.session.delete(review)
-                db.session.commit()
-
-                flash('Deleted successfully.', 'success')
-                return redirect(url_for('track_reviews'))
-            else:
-                return redirect(url_for('single_track_review',
                                         review_url=review.url))
         else:
             abort(404)
@@ -302,12 +257,10 @@ def artist_review_action(review_url, action):
         if request.method == 'POST':
             if form.validate_on_submit():
                 review.artist = form.artist.data
-                review.album = form.album.data
                 review.content = form.content.data
-                review.name = form.name.data
 
-                review_title = "%s" % (form.artist.data)
-                url_base = "%s" % (form.artist.data)
+                review_title = "%s - Artist Review" % (form.artist.data,)
+                url_base = "%s Artist Review" % (form.artist.data)
                 review_url = url_base.replace(" ", "-").lower()
                 review.page_title = review_title
                 review.url = review_url
@@ -329,7 +282,68 @@ def artist_review_action(review_url, action):
                 img_path = os.path.join(app.config['BASEDIR'],
                                         'static/reviews/',
                                         review.photo)
-                os.remove(img_path)
+
+                try:
+                    os.remove(img_path)
+                except OSError:
+                    # the file is already deleted
+                    pass
+                db.session.delete(review)
+                db.session.commit()
+
+                flash('Deleted successfully.', 'success')
+                return redirect(url_for('artist_reviews'))
+            else:
+                return redirect(url_for('single_artist_review',
+                                        review_url=review.url))
+        else:
+            abort(404)
+
+@app.route('/reviews/track/<review_url>/<action>', methods=['GET', 'POST'])
+def track_review_action(review_url, action):
+    review = TrackReview.query.filter_by(url=review_url).first()
+    if review is None:
+        abort(404)
+
+    if action == "edit":
+        form = TrackReviewFormEdit()
+        if request.method == 'POST':
+            if form.validate_on_submit():
+                review.artist = form.artist.data
+                review.album = form.album.data
+                review.content = form.content.data
+                review.name = form.name.data
+
+                review_title = "%s - %s - Track Review" % (form.artist.data,
+                                                           form.name.data)
+                url_base = "%s %s Track Review" % (form.artist.data,
+                                                   form.name.data)
+                review_url = url_base.replace(" ", "-").lower()
+                review.page_title = review_title
+                review.url = review_url
+
+                db.session.commit()
+
+                flash('Saved successfully.', 'success')
+                return redirect(url_for('single_track_review',
+                                        review_url=review.url))
+
+        return render_template('edit-track-review.html', title="Edit Review",
+                               review=review, form=form)
+
+    elif action == "delete":
+        form = TrackReviewFormDelete()
+        if request.method == 'POST':
+            if form.validate_on_submit():
+                # delete the review image
+                img_path = os.path.join(app.config['BASEDIR'],
+                                        'static/reviews/',
+                                        review.photo)
+                try:
+                    os.remove(img_path)
+                except OSError:
+                    # the file is already deleted
+                    pass
 
                 db.session.delete(review)
                 db.session.commit()
@@ -337,7 +351,7 @@ def artist_review_action(review_url, action):
                 flash('Deleted successfully.', 'success')
                 return redirect(url_for('track_reviews'))
             else:
-                return redirect(url_for('single_artist_review',
+                return redirect(url_for('single_track_review',
                                         review_url=review.url))
         else:
             abort(404)
