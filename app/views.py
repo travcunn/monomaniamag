@@ -119,8 +119,6 @@ def single_news_article(article_url):
     sorted_side_articles = side_articles.order_by(Article.pub_date.desc())
     shown_side_articles = sorted_side_articles.paginate(0, 6, False)
 
-    print shown_side_articles.items
-
     delete_form = NewsFormDelete()
 
     return render_template('news-article.html', title=article.page_title,
