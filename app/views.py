@@ -13,7 +13,7 @@ from sqlalchemy.orm import defer
 
 from app import app, db, login_manager
 from config import ALBUM_REVIEWS_PER_PAGE, ARTIST_REVIEWS_PER_PAGE, \
-        TRACK_REVIEWS_PER_PAGE
+        TRACK_REVIEWS_PER_PAGE, REVIEWS_PER_PAGE
 from forms import AlbumReviewForm, AlbumReviewFormDelete, \
         AlbumReviewFormEdit, ArtistReviewForm, ArtistReviewFormDelete, \
         ArtistReviewFormEdit, LoginValidator, NewsForm, TrackReviewForm, \
@@ -31,11 +31,27 @@ def home():
 
     # Album reviews query
     album_reviews = AlbumReview.query.options(defer('content'))
-    ordered_reviews = album_reviews.order_by(AlbumReview.pub_date.desc())
-    panel_album_reviews = ordered_reviews.paginate(0, 4, False)
+    ordered_album_reviews = \
+            album_reviews.order_by(AlbumReview.pub_date.desc())
+    panel_album_reviews = ordered_album_reviews.paginate(0, 4, False)
+
+    # Track reviews query
+    track_reviews = TrackReview.query.options(defer('content'))
+    ordered_track_reviews = \
+            track_reviews.order_by(TrackReview.pub_date.desc())
+    panel_track_reviews = ordered_track_reviews.paginate(0, 4, False)
+
+    # Artist reviews query
+    artist_reviews = ArtistReview.query.options(defer('content'))
+    ordered_artist_reviews = \
+            artist_reviews.order_by(ArtistReview.pub_date.desc())
+    panel_artist_reviews = ordered_artist_reviews.paginate(0, 4, False)
+
 
     return render_template('home.html',
                            panel_album_reviews=panel_album_reviews,
+                           panel_track_reviews=panel_track_reviews,
+                           panel_artist_reviews=panel_artist_reviews,
                            news=panel_news)
 
 @app.route('/news')
@@ -92,7 +108,29 @@ def single_news_article(article_url):
 
 @app.route('/reviews')
 def reviews():
-    return "test reviews page"
+    album_reviews = AlbumReview.query.options(defer('content'))
+    sorted_album_reviews = album_reviews.order_by(AlbumReview.pub_date.desc())
+    shown_album_reviews = sorted_album_reviews.paginate(0,
+                                REVIEWS_PER_PAGE,
+                                False)
+
+    track_reviews = TrackReview.query.options(defer('content'))
+    sorted_track_reviews = track_reviews.order_by(TrackReview.pub_date.desc())
+    shown_track_reviews = sorted_track_reviews.paginate(0,
+                                REVIEWS_PER_PAGE,
+                                False)
+
+    artist_reviews = ArtistReview.query.options(defer('content'))
+    sorted_artist_reviews = \
+            artist_reviews.order_by(ArtistReview.pub_date.desc())
+    shown_artist_reviews = sorted_artist_reviews.paginate(0,
+                                REVIEWS_PER_PAGE,
+                                False)
+
+    return render_template('reviews.html', title='Reviews',
+                           album_reviews=shown_album_reviews,
+                           track_reviews=shown_track_reviews,
+                           artist_reviews=shown_artist_reviews)
 
 @app.route('/reviews/album')
 @app.route('/reviews/album/page/<int:page>', methods = ['GET', 'POST'])

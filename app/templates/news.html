@@ -18,12 +18,12 @@
 
 
 <div class="row">
-    <div class="col-lg-9">
+    <div class="col-lg-12">
         <h1>News</h1>
         <div class="row">
                 <!--  for article -->
                 {% for article in news.items %}
-                <div class="col-lg-6">
+                <div class="col-md-4 col-sm-4 col-xs-12">
                 <div class="front-review">
                     <div class="col-sm-4">
                         <a href="{{ url_for('single_news_article', article_url=article.url) }}">
@@ -45,10 +45,6 @@
                 <!-- end for -->
         </div>
 
-    </div>
-
-     <div class="col-lg-3">
-        <h1>Last</h2>
     </div>
 
 </div>

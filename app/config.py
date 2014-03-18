@@ -3,6 +3,8 @@ import os
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
 
+REVIEWS_PER_PAGE = 6
+
 ALBUM_REVIEWS_PER_PAGE = 9
 ARTIST_REVIEWS_PER_PAGE = 9
 TRACK_REVIEWS_PER_PAGE = 9
