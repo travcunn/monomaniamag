@@ -87,8 +87,8 @@ def single_news_article(article_url):
                            review=review, side_reviews=shown_side_reviews,
                            delete_form=delete_form)
 
-@app.route('/reviews')
-@app.route('/reviews/page/<int:page>', methods = ['GET', 'POST'])
+@app.route('/reviews/album')
+@app.route('/reviews/album/page/<int:page>', methods = ['GET', 'POST'])
 def album_reviews(page=1):
     reviews = AlbumReview.query.options(defer('content'))
     sorted_reviews = reviews.order_by(AlbumReview.pub_date.desc())
@@ -100,10 +100,42 @@ def album_reviews(page=1):
         else:
             abort(404)
 
-    return render_template('album-reviews.html', title='Reviews',
+    return render_template('album-reviews.html', title='Album Reviews',
                            reviews=shown_reviews)
 
-@app.route('/reviews/<review_url>')
+@app.route('/reviews/track')
+@app.route('/reviews/track/page/<int:page>', methods = ['GET', 'POST'])
+def track_reviews(page=1):
+    reviews = TrackReview.query.options(defer('content'))
+    sorted_reviews = reviews.order_by(TrackReview.pub_date.desc())
+    shown_reviews = sorted_reviews.paginate(page, TRACK_REVIEWS_PER_PAGE,
+                                            False)
+    if len(shown_reviews.items) is 0:
+        if page is 1:
+            flash("There are no reviews yet.", 'info')
+        else:
+            abort(404)
+
+    return render_template('track-reviews.html', title='Track Reviews',
+                           reviews=shown_reviews)
+
+@app.route('/reviews/artist')
+@app.route('/reviews/artist/page/<int:page>', methods = ['GET', 'POST'])
+def track_reviews(page=1):
+    reviews = ArtistReview.query.options(defer('content'))
+    sorted_reviews = reviews.order_by(ArtistReview.pub_date.desc())
+    shown_reviews = sorted_reviews.paginate(page, ARTIST_REVIEWS_PER_PAGE,
+                                            False)
+    if len(shown_reviews.items) is 0:
+        if page is 1:
+            flash("There are no reviews yet.", 'info')
+        else:
+            abort(404)
+
+    return render_template('artist-reviews.html', title='Artist Reviews',
+                           reviews=shown_reviews)
+
+@app.route('/reviews/album/<review_url>')
 def single_album_review(review_url):
     review = AlbumReview.query.filter_by(url=review_url).first()
     if review is None:
@@ -119,7 +151,39 @@ def single_album_review(review_url):
                            review=review, side_reviews=shown_side_reviews,
                            delete_form=delete_form)
 
-@app.route('/reviews/<review_url>/<action>', methods=['GET', 'POST'])
+@app.route('/reviews/track/<review_url>')
+def single_track_review(review_url):
+    review = TrackReview.query.filter_by(url=review_url).first()
+    if review is None:
+        abort(404)
+
+    side_reviews = TrackReview.query.options(defer('content'))
+    sorted_side_reviews = side_reviews.order_by(TrackReview.pub_date.desc())
+    shown_side_reviews = sorted_side_reviews.paginate(0, 6, False)
+
+    delete_form = TrackReviewFormDelete()
+
+    return render_template('track-review.html', title=review.page_title,
+                           review=review, side_reviews=shown_side_reviews,
+                           delete_form=delete_form)
+
+@app.route('/reviews/artist/<review_url>')
+def artist_track_review(review_url):
+    review = ArtistReview.query.filter_by(url=review_url).first()
+    if review is None:
+        abort(404)
+
+    side_reviews = ArtistReview.query.options(defer('content'))
+    sorted_side_reviews = side_reviews.order_by(ArtistReview.pub_date.desc())
+    shown_side_reviews = sorted_side_reviews.paginate(0, 6, False)
+
+    delete_form = ArtistReviewFormDelete()
+
+    return render_template('arist-review.html', title=review.page_title,
+                           review=review, side_reviews=shown_side_reviews,
+                           delete_form=delete_form)
+
+@app.route('/reviews/album/<review_url>/<action>', methods=['GET', 'POST'])
 def album_review_action(review_url, action):
     review = AlbumReview.query.filter_by(url=review_url).first()
     if review is None:
@@ -169,7 +233,109 @@ def album_review_action(review_url, action):
         else:
             abort(404)
 
-@app.route('/reviews/new', methods=['GET', 'POST'])
+@app.route('/reviews/track/<review_url>/<action>', methods=['GET', 'POST'])
+def track_review_action(review_url, action):
+    review = TrackReview.query.filter_by(url=review_url).first()
+    if review is None:
+        abort(404)
+
+    if action == "edit":
+        form = TrackReviewFormEdit()
+        if request.method == 'POST':
+            if form.validate_on_submit():
+                review.artist = form.artist.data
+                review.album = form.album.data
+                review.content = form.content.data
+		review.name = form.name.data
+
+                review_title = "%s - %s" % (form.artist.data, form.track.data)
+                url_base = "%s %s" % (form.artist.data, form.track.data)
+                review_url = url_base.replace(" ", "-").lower()
+                review.page_title = review_title
+                review.url = review_url
+
+                db.session.commit()
+
+                flash('Saved successfully.', 'success')
+                return redirect(url_for('single_track_review',
+                                        review_url=review.url))
+
+        return render_template('edit-track-review.html', title="Edit Review",
+                               review=review, form=form)
+
+    elif action == "delete":
+        form = TrackReviewFormDelete()
+        if request.method == 'POST':
+            if form.validate_on_submit():
+                # delete the review image
+                img_path = os.path.join(app.config['BASEDIR'],
+                                        'static/reviews/',
+                                        review.photo)
+                os.remove(img_path)
+
+                db.session.delete(review)
+                db.session.commit()
+
+                flash('Deleted successfully.', 'success')
+                return redirect(url_for('track_reviews'))
+            else:
+                return redirect(url_for('single_track_review',
+                                        review_url=review.url))
+        else:
+            abort(404)
+
+@app.route('/reviews/artist/<review_url>/<action>', methods=['GET', 'POST'])
+def artist_review_action(review_url, action):
+    review = ArtistReview.query.filter_by(url=review_url).first()
+    if review is None:
+        abort(404)
+
+    if action == "edit":
+        form = ArtistReviewFormEdit()
+        if request.method == 'POST':
+            if form.validate_on_submit():
+                review.artist = form.artist.data
+                review.album = form.album.data
+                review.content = form.content.data
+		review.name = form.name.data
+
+                review_title = "%s" % (form.artist.data)
+                url_base = "%s" % (form.artist.data)
+                review_url = url_base.replace(" ", "-").lower()
+                review.page_title = review_title
+                review.url = review_url
+
+                db.session.commit()
+
+                flash('Saved successfully.', 'success')
+                return redirect(url_for('single_artist_review',
+                                        review_url=review.url))
+
+        return render_template('edit-artist-review.html', title="Edit Review",
+                               review=review, form=form)
+
+    elif action == "delete":
+        form = ArtistReviewFormDelete()
+        if request.method == 'POST':
+            if form.validate_on_submit():
+                # delete the review image
+                img_path = os.path.join(app.config['BASEDIR'],
+                                        'static/reviews/',
+                                        review.photo)
+                os.remove(img_path)
+
+                db.session.delete(review)
+                db.session.commit()
+
+                flash('Deleted successfully.', 'success')
+                return redirect(url_for('track_reviews'))
+            else:
+                return redirect(url_for('single_artist_review',
+                                        review_url=review.url))
+        else:
+            abort(404)
+
+@app.route('/reviews/album/new', methods=['GET', 'POST'])
 @login_required
 def add_new_album_review():
     form = AlbumReviewForm()
@@ -198,6 +364,67 @@ def add_new_album_review():
 
     return render_template('new-album-review.html', title='Add New Review',
                            form=form)
+
+
+@app.route('/reviews/track/new', methods=['GET', 'POST'])
+@login_required
+def add_new_track_review():
+    form = TrackReviewForm() #!#
+    if form.validate_on_submit():
+        upload = secure_filename(form.upload.data.filename)
+        name, extension = os.path.splitext(upload)
+        filename_hash = hashlib.sha1(str(time.time()))
+        filename = str(filename_hash.hexdigest()) + str(extension)
+        form.upload.data.save(os.path.join(app.config['BASEDIR'], 'static', 'reviews',
+                                           filename))
+
+        review_title = "%s - %s - Track Review" % (form.artist.data,
+                                                   form.name.data)
+        url_base = "%s %s Track Review" % (form.artist.data, form.name.data)
+                             pub_date=datetime.datetime.utcnow(),
+        review_url = url_base.replace(" ", "-").lower()
+
+        review = TrackReview(artist=form.artist.data, album=form.album.data,
+                             photo=filename, content=form.content.data,
+                             author=g.user, page_title=review_title,
+                             url=review_url, name=form.name.data)
+        db.session.add(review)
+        db.session.commit()
+        flash('The track review was created and published.')
+        return redirect(url_for('reviews'))
+
+    return render_template('new-track-review.html', title='Add New Review',
+                           form=form)
+
+@app.route('/reviews/artist/new', methods=['GET', 'POST'])
+@login_required
+def add_new_artist_review():
+    form = ArtistReviewForm()
+    if form.validate_on_submit():
+        upload = secure_filename(form.upload.data.filename)
+        name, extension = os.path.splitext(upload)
+        filename_hash = hashlib.sha1(str(time.time()))
+        filename = str(filename_hash.hexdigest()) + str(extension)
+        form.upload.data.save(os.path.join(app.config['BASEDIR'], 'static', 'reviews',
+                                           filename))
+
+        review_title = "%s - Artist Review" % (form.artist.data,)
+        url_base = "%s Artist Review" % (form.artist.data)
+                             pub_date=datetime.datetime.utcnow(),
+        review_url = url_base.replace(" ", "-").lower()
+
+        review = ArtistReview(artist=form.artist.data, album=form.album.data,
+                             photo=filename, content=form.content.data,
+                             author=g.user, page_title=review_title,
+                             url=review_url, name=form.name.data)
+        db.session.add(review)
+        db.session.commit()
+        flash('The artist review was created and published.')
+        return redirect(url_for('reviews'))
+
+    return render_template('new-artist-review.html', title='Add New Review',
+                           form=form)
+
 
 @app.route('/artists')
 def artists():
@@ -251,3 +478,5 @@ def load_user(id):
 @app.before_request
 def before_request():
     g.user = current_user
+
+
