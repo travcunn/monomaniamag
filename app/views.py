@@ -12,10 +12,13 @@ from werkzeug import secure_filename
 from sqlalchemy.orm import defer
 
 from app import app, db, login_manager
-from config import ALBUM_REVIEWS_PER_PAGE
+from config import ALBUM_REVIEWS_PER_PAGE, ARTIST_REVIEWS_PER_PAGE, \
+        TRACK_REVIEWS_PER_PAGE
 from forms import AlbumReviewForm, AlbumReviewFormDelete, \
-        AlbumReviewFormEdit, LoginValidator, NewsForm
-from models import AlbumReview, Article, User
+        AlbumReviewFormEdit, ArtistReviewForm, ArtistReviewFormDelete, \
+        ArtistReviewFormEdit, LoginValidator, NewsForm, TrackReviewForm, \
+        TrackReviewFormDelete, TrackReviewFormEdit
+from models import AlbumReview, Article, ArtistReview, TrackReview, User
 
 
 login_manager.login_view = 'login'
@@ -121,7 +124,7 @@ def track_reviews(page=1):
 
 @app.route('/reviews/artist')
 @app.route('/reviews/artist/page/<int:page>', methods = ['GET', 'POST'])
-def track_reviews(page=1):
+def artist_reviews(page=1):
     reviews = ArtistReview.query.options(defer('content'))
     sorted_reviews = reviews.order_by(ArtistReview.pub_date.desc())
     shown_reviews = sorted_reviews.paginate(page, ARTIST_REVIEWS_PER_PAGE,
@@ -381,13 +384,13 @@ def add_new_track_review():
         review_title = "%s - %s - Track Review" % (form.artist.data,
                                                    form.name.data)
         url_base = "%s %s Track Review" % (form.artist.data, form.name.data)
-                             pub_date=datetime.datetime.utcnow(),
         review_url = url_base.replace(" ", "-").lower()
 
         review = TrackReview(artist=form.artist.data, album=form.album.data,
                              photo=filename, content=form.content.data,
                              author=g.user, page_title=review_title,
-                             url=review_url, name=form.name.data)
+                             url=review_url, name=form.name.data,
+                             pub_date=datetime.datetime.utcnow())
         db.session.add(review)
         db.session.commit()
         flash('The track review was created and published.')
@@ -410,13 +413,13 @@ def add_new_artist_review():
 
         review_title = "%s - Artist Review" % (form.artist.data,)
         url_base = "%s Artist Review" % (form.artist.data)
-                             pub_date=datetime.datetime.utcnow(),
         review_url = url_base.replace(" ", "-").lower()
 
         review = ArtistReview(artist=form.artist.data, album=form.album.data,
                              photo=filename, content=form.content.data,
                              author=g.user, page_title=review_title,
-                             url=review_url, name=form.name.data)
+                             url=review_url, name=form.name.data,
+                             pub_date=datetime.datetime.utcnow())
         db.session.add(review)
         db.session.commit()
         flash('The artist review was created and published.')
