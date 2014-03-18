@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="row">
+    <div class="col-md-12">
+    <h1>Edit Album Review</h1>
+    </div>
+</div>
+
+{% if form.errors %}
+<div class="row">
+<div class="alert alert-dismissable alert-danger">
+    <button type="button" class="close" data-dismiss="alert">×</button>
+    <strong>Oh snap!</strong> Check the following fields and try again:
+    <ul class=errors>
+    {% for error in form.errors %}
+    <li><strong>{{ error }}</strong></li>
+    {% endfor %}
+    </ul>
+</div>
+</div>
+{% endif %}
+
+<div class="row">
+<div class="col-md-12">
+    <form class="form-horizontal" role="form" action="{{ url_for('article_action', article_url=article.url, action="edit") }}" method="POST" enctype="multipart/form-data">
+        {{ form.csrf_token }}
+    <div class="form-group">
+    <label for="artist" class="col-sm-2 control-label">Title</label>
+    <div class="col-sm-10">
+      {{form.title(id="title", class="form-control", placeholder="Title", value=article.page_title)}}
+    </div>
+  </div>
+  <div class="form-group">
+      <label for="album" class="col-sm-2 control-label">Article Preview</label>
+    <div class="col-sm-10">
+      {{form.preview(id="preview", class="form-control", placeholder="Preview", value=article.preview)}}
+    </div>
+  </div>
+
+   <div class="form-group">
+      <label for="album" class="col-sm-2 control-label">Featured</label>
+    <div class="col-sm-10">
+      {{form.featured(id="feature", class="form-control", value=article.featured)}}
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="content" class="col-sm-2 control-label">Content</label>
+    <div class="col-sm-10">
+         {{form.content(id="content", class="form-control content", rows=20, placeholder=article.content )}}
+    </div>
+    </div>
+
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10">
+      <button type="submit" class="btn btn-primary">Save</button>
+      </form>
+      <a href="{{ url_for('single_news_article', article_url=article.url) }}">
+        <button type="button" class="btn btn-success">Cancel</button>
+        </a>
+
+    </div>
+</div>
+
+</div>
+
+</div>
+
+
+<script src="/static/js/wysihtml5/wysihtml5-0.3.0.min.js"></script>
+<script src="/static/js/wysihtml5/handlebars.runtime.min.js"></script>
+<script src="/static/js/wysihtml5/bootstrap3-wysihtml5.min.js"></script>
+
+<script>
+  $('.content').wysihtml5();
+</script>
+
+
+{% endblock %}

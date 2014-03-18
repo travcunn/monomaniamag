@@ -78,6 +78,16 @@ class NewsForm(Form):
     content = TextAreaField('Content', validators=[Required()])
 
 
+class NewsFormEdit(Form):
+    title = TextField('Title', validators=[Required()])
+    preview = TextField('Preview', validators=[Required()])
+    featured = BooleanField('Featured')
+    content = TextAreaField('Content', validators=[Required()])
+
+class NewsFormDelete(Form):
+    pass
+
+
 class LoginValidator(object):
     def __init__(self, username, password):
         self.__username = username

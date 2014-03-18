@@ -13,11 +13,12 @@ from sqlalchemy.orm import defer
 
 from app import app, db, login_manager
 from config import ALBUM_REVIEWS_PER_PAGE, ARTIST_REVIEWS_PER_PAGE, \
-        TRACK_REVIEWS_PER_PAGE, REVIEWS_PER_PAGE
+        NEWS_ARTICLES_PER_PAGE, TRACK_REVIEWS_PER_PAGE, REVIEWS_PER_PAGE
 from forms import AlbumReviewForm, AlbumReviewFormDelete, \
         AlbumReviewFormEdit, ArtistReviewForm, ArtistReviewFormDelete, \
-        ArtistReviewFormEdit, LoginValidator, NewsForm, TrackReviewForm, \
-        TrackReviewFormDelete, TrackReviewFormEdit
+        ArtistReviewFormEdit, LoginValidator, NewsForm, NewsFormDelete, \
+        NewsFormEdit, TrackReviewForm, TrackReviewFormDelete, \
+        TrackReviewFormEdit
 from models import AlbumReview, Article, ArtistReview, TrackReview, User
 
 
@@ -27,7 +28,8 @@ login_manager.login_view = 'login'
 def home():
 
     first_featured = Article.query.options(defer('content'))
-    one_featured = first_featured.order_by(Article.pub_date.desc()).first()
+    filtered_first = first_featured.filter_by(featured=True)
+    one_featured = filtered_first.order_by(Article.pub_date.desc()).first()
 
     featured_articles = Article.query.options(defer('content'))
     filtered_featured = featured_articles.filter_by(featured=True)
@@ -37,7 +39,8 @@ def home():
 
     news_articles = Article.query.options(defer('content'))
     ordered_articles = news_articles.order_by(Article.pub_date.desc())
-    panel_news = ordered_articles.paginate(0, 4, False)
+    filtered_articles = ordered_articles.filter_by(featured=False)
+    panel_news = filtered_articles.paginate(0, 4, False)
 
     # Album reviews query
     album_reviews = AlbumReview.query.options(defer('content'))
@@ -67,11 +70,14 @@ def home():
                            news=panel_news)
 
 @app.route('/news')
-def news():
+@app.route('/news/page/<int:page>', methods = ['GET', 'POST'])
+def news(page=1):
     album_reviews = Article.query.options(defer('content'))
 
     ordered_reviews = album_reviews.order_by(Article.pub_date.desc())
-    panel_album_reviews = ordered_reviews.paginate(0, 9, False)
+    panel_album_reviews = ordered_reviews.paginate(page,
+                                                   NEWS_ARTICLES_PER_PAGE,
+                                                   False)
 
     return render_template('news.html', news=panel_album_reviews)
 
@@ -89,7 +95,8 @@ def add_news():
 
         article_url = form.title.data.replace(" ", "-").lower()
 
-        review = Article(page_title=form.title.data, preview=form.preview.data,
+        review = Article(page_title=form.title.data,
+                         preview=form.preview.data,
                          featured=form.featured.data, photo=filename,
                          content=form.content.data,
                          pub_date=datetime.datetime.utcnow(),
@@ -104,19 +111,73 @@ def add_news():
 
 @app.route('/news/<article_url>')
 def single_news_article(article_url):
-    review = AlbumReview.query.filter_by(url=article_url).first()
-    if review is None:
+    article = Article.query.filter_by(url=article_url).first()
+    if article is None:
         abort(404)
 
-    side_reviews = AlbumReview.query.options(defer('content'))
-    sorted_side_reviews = side_reviews.order_by(AlbumReview.pub_date.desc())
-    shown_side_reviews = sorted_side_reviews.paginate(0, 6, False)
+    side_articles = Article.query.options(defer('content'))
+    sorted_side_articles = side_articles.order_by(Article.pub_date.desc())
+    shown_side_articles = sorted_side_articles.paginate(0, 6, False)
 
-    delete_form = AlbumReviewFormDelete()
+    print shown_side_articles.items
 
-    return render_template('album-review.html', title=review.page_title,
-                           review=review, side_reviews=shown_side_reviews,
+    delete_form = NewsFormDelete()
+
+    return render_template('news-article.html', title=article.page_title,
+                           article=article, side_articles=shown_side_articles,
                            delete_form=delete_form)
+
+
+@app.route('/news/<article_url>/<action>', methods=['GET', 'POST'])
+def article_action(article_url, action):
+    article = Article.query.filter_by(url=article_url).first()
+    if article is None:
+        abort(404)
+
+    if action == "edit":
+        form = NewsFormEdit()
+        if request.method == 'POST':
+            if form.validate_on_submit():
+                article.preview = form.preview.data
+                article.featured = form.featured.data
+                article.content = form.content.data
+
+                article.url = form.title.data.replace(" ", "-").lower()
+                article.page_title = form.title.data
+
+                db.session.commit()
+
+                flash('Saved successfully.', 'success')
+                return redirect(url_for('single_news_article',
+                                        article_url=article.url))
+
+        return render_template('edit-news-article.html', title="Edit Article",
+                               article=article, form=form)
+
+    elif action == "delete":
+        form = NewsFormDelete()
+        if request.method == 'POST':
+            if form.validate_on_submit():
+                # delete the article image
+                img_path = os.path.join(app.config['BASEDIR'],
+                                        'static/news/',
+                                        article.photo)
+                try:
+                    os.remove(img_path)
+                except OSError:
+                    # the file is already deleted
+                    pass
+
+                db.session.delete(article)
+                db.session.commit()
+
+                flash('Deleted successfully.', 'success')
+                return redirect(url_for('news'))
+            else:
+                return redirect(url_for('single_news_article',
+                                        article_url=article.url))
+        else:
+            abort(404)
 
 @app.route('/reviews')
 def reviews():
