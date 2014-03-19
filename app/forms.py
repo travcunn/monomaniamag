@@ -12,7 +12,7 @@ class AlbumReviewForm(Form):
     album = TextField('Album', validators=[Required()])
     upload = FileField('Image', validators=[
         FileRequired(),
-        FileAllowed(['jpg', 'png'], 'Images only!')
+        FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')
     ])
     content = TextAreaField('Content', validators=[Required()])
 
@@ -33,7 +33,7 @@ class TrackReviewForm(Form):
     name = TextField('Name', validators=[Required()])
     upload = FileField('Image', validators=[
         FileRequired(),
-        FileAllowed(['jpg', 'png'], 'Images only!')
+        FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')
     ])
     content = TextAreaField('Content', validators=[Required()])
 
@@ -53,7 +53,7 @@ class ArtistReviewForm(Form):
     artist = TextField('Artist', validators=[Required()])
     upload = FileField('Image', validators=[
         FileRequired(),
-        FileAllowed(['jpg', 'png'], 'Images only!')
+        FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')
     ])
     content = TextAreaField('Content', validators=[Required()])
 
@@ -73,7 +73,7 @@ class NewsForm(Form):
     featured = BooleanField('Featured')
     upload = FileField('Image', validators=[
         FileRequired(),
-        FileAllowed(['jpg', 'png'], 'Images only!')
+        FileAllowed(['jpg', 'png', 'jpeg'], 'Images only!')
     ])
     content = TextAreaField('Content', validators=[Required()])
 
