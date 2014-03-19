@@ -201,13 +201,13 @@
             <div class="front-review">
             <div class="row">
                 <div class="col-sm-4">
-                    <a href="{{ url_for('single_album_review', review_url=review.url) }}">
+                    <a href="{{ url_for('single_track_review', review_url=review.url) }}">
                     <img class="img-responsive" src="/static/reviews/{{ review.photo }}">
                     </a>
                 </div>
                 <div class="col-sm-8">
                     <div class="side-review">
-                    <a href="{{ url_for('single_album_review', review_url=review.url)}}">
+                    <a href="{{ url_for('single_track_review', review_url=review.url)}}">
                         <p><strong>{{ review.artist }}</strong></p>
                         <p><small>{{ review.album }}</small></p>
                     </a>
@@ -242,13 +242,13 @@
             <div class="front-review">
             <div class="row">
                 <div class="col-sm-4">
-                    <a href="{{ url_for('single_album_review', review_url=review.url) }}">
+                    <a href="{{ url_for('single_artist_review', review_url=review.url) }}">
                     <img class="img-responsive" src="/static/reviews/{{ review.photo }}">
                     </a>
                 </div>
                 <div class="col-sm-8">
                     <div class="side-review">
-                    <a href="{{ url_for('single_album_review', review_url=review.url)}}">
+                    <a href="{{ url_for('single_artist_review', review_url=review.url)}}">
                         <p><strong>{{ review.artist }}</strong></p>
                         <p><small>{{ review.album }}</small></p>
                     </a>
