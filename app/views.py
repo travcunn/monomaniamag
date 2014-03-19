@@ -19,7 +19,7 @@ from forms import AlbumReviewForm, AlbumReviewFormDelete, \
         AlbumReviewFormEdit, ArtistReviewForm, ArtistReviewFormDelete, \
         ArtistReviewFormEdit, LoginValidator, NewsForm, \
         NewsFormDelete, NewsFormEdit, TrackReviewForm, \
-        TrackReviewFormDelete, TrackReviewFormEdit, VideoForm
+        TrackReviewFormDelete, TrackReviewFormEdit, VideoForm, VideoFormDelete
 from models import AlbumReview, Article, ArtistReview, TrackReview, User, \
         Video
 
@@ -62,6 +62,10 @@ def home():
             artist_reviews.order_by(ArtistReview.pub_date.desc())
     panel_artist_reviews = ordered_artist_reviews.paginate(0, 4, False)
 
+    videos = Video.query.options(defer('content'))
+    ordered_videos = videos.order_by(Video.pub_date.desc())
+    shown_videos1 = ordered_videos.paginate(1, 3, False)
+    shown_videos2 = ordered_videos.paginate(2, 3, False)
 
     return render_template('home.html',
                            panel_album_reviews=panel_album_reviews,
@@ -69,10 +73,11 @@ def home():
                            panel_artist_reviews=panel_artist_reviews,
                            one_featured=one_featured,
                            featured_news=featured_news,
-                           news=panel_news)
+                           news=panel_news, videos1=shown_videos1,
+                           videos2=shown_videos2)
 
 @app.route('/news')
-@app.route('/news/page/<int:page>', methods = ['GET', 'POST'])
+@app.route('/news/page/<int:page>', methods = ['GET'])
 def news(page=1):
     album_reviews = Article.query.options(defer('content'))
 
@@ -180,36 +185,118 @@ def article_action(article_url, action):
             abort(404)
 
 @app.route('/videos')
-@app.route('/videos/page/<int:page>', methods = ['GET', 'POST'])
-def videos(page=1):
-    videos = Video.query.options(defer('content'))
+def videos():
+    videos_first = Video.query.options(defer('content')).filter_by(category=1)
+    ordered_videos = videos_first.order_by(Video.pub_date.desc())
+    videos1 = ordered_videos.paginate(1, 4, False)
+    videos2 = ordered_videos.paginate(2, 4, False)
+    videos3 = ordered_videos.paginate(3, 4, False)
 
-    ordered_videos = videos.order_by(Video.pub_date.desc())
-    panel_album_reviews = ordered_videos.paginate(page, VIDEOS_PER_PAGE,
-                                                  False)
+    videos_second = Video.query.options(defer('content')) \
+            .filter_by(category=2)
+    ordered_videos = videos_second.order_by(Video.pub_date.desc())
+    videos4 = ordered_videos.paginate(1, 4, False)
+    videos5 = ordered_videos.paginate(2, 4, False)
+    videos6 = ordered_videos.paginate(3, 4, False)
 
-    return render_template('videos.html', news=panel_album_reviews)
+    videos_third = Video.query.options(defer('content')).filter_by(category=3)
+    ordered_videos = videos_third.order_by(Video.pub_date.desc())
+    videos7 = ordered_videos.paginate(1, 4, False)
+    videos8 = ordered_videos.paginate(2, 4, False)
+    videos9 = ordered_videos.paginate(3, 4, False)
+
+    return render_template('videos.html', videos1=videos1,
+                           videos2=videos2, videos3=videos3, videos4=videos4,
+                           videos5=videos5, videos6=videos6, videos7=videos7,
+                           videos8=videos8, videos9=videos9)
+
+@app.route('/videos/<video_url>')
+def single_video(video_url):
+    video = Video.query.filter_by(url=video_url).first()
+    if video is None:
+        abort(404)
+
+    delete_form = VideoFormDelete()
+
+    return render_template('video.html', title=video.title,
+                           video=video, delete_form=delete_form)
 
 @app.route('/videos/new', methods=['GET', 'POST'])
 @login_required
 def add_video():
     form = VideoForm()
     if form.validate_on_submit():
-        article_url = form.title.data.replace(" ", "-").lower()
+        video_url = form.title.data.replace(" ", "-").lower()
 
-        review = Article(page_title=form.title.data,
-                         preview=form.preview.data,
-                         featured=form.featured.data, photo=filename,
-                         content=form.content.data,
-                         pub_date=datetime.datetime.utcnow(),
-                         url=article_url, author=g.user)
-        db.session.add(review)
+        video = Video(title=form.title.data,
+                      category=form.category.data,
+                      youtube_id=form.youtube_id.data,
+                      content=form.content.data,
+                      pub_date=datetime.datetime.utcnow(),
+                      url=video_url, author=g.user)
+        db.session.add(video)
         db.session.commit()
         flash('The video was published.')
         return redirect(url_for('videos'))
 
     return render_template('new-video.html', title='Add Video',
                            form=form)
+
+@app.route('/videos/<video_url>/<action>', methods=['GET', 'POST'])
+def video_action(video_url, action):
+    review = AlbumReview.query.filter_by(url=video_url).first()
+    if review is None:
+        abort(404)
+
+    if action == "edit":
+        form = AlbumReviewFormEdit()
+        if request.method == 'POST':
+            if form.validate_on_submit():
+                review.artist = form.artist.data
+                review.album = form.album.data
+                review.content = form.content.data
+
+                review_title = "%s - %s - Album Review" % (form.artist.data,
+                                                         form.album.data)
+                url_base = "%s %s Album Review" % (form.artist.data,
+                                                   form.album.data)
+                review_url = url_base.replace(" ", "-").lower()
+                review.page_title = review_title
+                review.url = review_url
+
+                db.session.commit()
+
+                flash('Saved successfully.', 'success')
+                return redirect(url_for('single_album_review',
+                                        review_url=review.url))
+
+        return render_template('edit-album-review.html', title="Edit Review",
+                               review=review, form=form)
+
+    elif action == "delete":
+        form = AlbumReviewFormDelete()
+        if request.method == 'POST':
+            if form.validate_on_submit():
+                # delete the review image
+                img_path = os.path.join(app.config['BASEDIR'],
+                                        'static/reviews/',
+                                        review.photo)
+                try:
+                    os.remove(img_path)
+                except OSError:
+                    # the file is already deleted
+                    pass
+
+                db.session.delete(review)
+                db.session.commit()
+
+                flash('Deleted successfully.', 'success')
+                return redirect(url_for('album_reviews'))
+            else:
+                return redirect(url_for('single_album_review',
+                                        review_url=review.url))
+        else:
+            abort(404)
 
 @app.route('/reviews')
 def reviews():
@@ -238,7 +325,7 @@ def reviews():
                            artist_reviews=shown_artist_reviews)
 
 @app.route('/reviews/album')
-@app.route('/reviews/album/page/<int:page>', methods = ['GET', 'POST'])
+@app.route('/reviews/album/page/<int:page>', methods = ['GET'])
 def album_reviews(page=1):
     reviews = AlbumReview.query.options(defer('content'))
     sorted_reviews = reviews.order_by(AlbumReview.pub_date.desc())
@@ -254,7 +341,7 @@ def album_reviews(page=1):
                            reviews=shown_reviews)
 
 @app.route('/reviews/track')
-@app.route('/reviews/track/page/<int:page>', methods = ['GET', 'POST'])
+@app.route('/reviews/track/page/<int:page>', methods = ['GET'])
 def track_reviews(page=1):
     reviews = TrackReview.query.options(defer('content'))
     sorted_reviews = reviews.order_by(TrackReview.pub_date.desc())
@@ -270,7 +357,7 @@ def track_reviews(page=1):
                            reviews=shown_reviews)
 
 @app.route('/reviews/artist')
-@app.route('/reviews/artist/page/<int:page>', methods = ['GET', 'POST'])
+@app.route('/reviews/artist/page/<int:page>', methods = ['GET'])
 def artist_reviews(page=1):
     reviews = ArtistReview.query.options(defer('content'))
     sorted_reviews = reviews.order_by(ArtistReview.pub_date.desc())

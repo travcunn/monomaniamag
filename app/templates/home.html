@@ -110,9 +110,7 @@
 
             <div class="row">
                 <div class="col-sm-12 center-text">
-                    <a href="{{ url_for('album_reviews', page=2) }}"
-                        <h6>More Artists >></h6>
-                    </a>
+                    <h5>Coming Soon</h5>
                 </div>
             </div>
         </div>
@@ -130,42 +128,27 @@
         </div>
     </div>
     <div class="row">
+
+    {% for video in videos1.items %}
     <div class="col-sm-4">
-    <a class="thumbnail" href="#">
-    <img src="http://placehold.it/170x110" alt="170x110" />
-    <span class="caption">Anberlin Live 1102/22</span>
-</a>
-</div>
-<div class="col-sm-4">
-    <a class="thumbnail" href="#">
-    <img src="http://placehold.it/170x110" alt="170x110" />
-    <span class="caption">Anberlin Live 02/22</span>
-</a>
-</div>
-<div class="col-sm-4">
-    <a class="thumbnail" href="#">
-    <img src="http://placehold.it/170x110" alt="170x110" />
-    <span class="caption">Anberlin Live 02/22</span>
-</a>
-</div>
-<div class="col-sm-4">
-    <a class="thumbnail" href="#">
-    <img src="http://placehold.it/170x110" alt="170x110" />
-    <span class="caption">Anberlin Live 02/22</span>
-</a>
-</div>
-<div class="col-sm-4">
-    <a class="thumbnail" href="#">
-    <img src="http://placehold.it/170x110" alt="170x110" />
-    <span class="caption">Anberlin Live 02/22</span>
-</a>
-</div>
-<div class="col-sm-4">
-    <a class="thumbnail" href="#">
-    <img src="http://placehold.it/170x110" alt="170x110" />
-    <span class="caption">Anberlin Live 02/22</span>
-</a>
-</div>
+        <a class="thumbnail" href="{{ url_for('single_video', video_url=video.url) }}">
+            <img alt="{{ video.title }}" src="http://img.youtube.com/vi/{{ video.youtube_id }}/mqdefault.jpg">
+            <span class="caption">{{ video.title }}</span>
+        </a>
+    </div>
+    {% endfor %}
+
+    </div>
+    <div class="row">
+    {% for video in videos2.items %}
+    <div class="col-sm-4">
+        <a class="thumbnail" href="{{ url_for('single_video', video_url=video.url) }}">
+            <img alt="{{ video.title }}" src="http://img.youtube.com/vi/{{ video.youtube_id }}/mqdefault.jpg">
+            <span class="caption">{{ video.title }}</span>
+        </a>
+    </div>
+    {% endfor %}
+
 </div>
 </div> <!-- large-6 -->
 <div class="col-lg-6">
