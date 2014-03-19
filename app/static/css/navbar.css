@@ -192,3 +192,20 @@ a.panel-title:hover {
   height: 100px
 }
 /* End carousel */
+
+
+.videos-title
+{
+  margin-top:-10px;
+  text-align: center;
+}
+
+.video-description
+{
+  margin-top:20px;
+}
+
+.video-front
+{
+  margin-bottom:0px;
+}

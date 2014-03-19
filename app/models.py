@@ -19,6 +19,7 @@ class User(db.Model):
     track_reviews = db.relationship('TrackReview', backref='author',
                                     lazy='dynamic')
     articles = db.relationship('Article', backref='author', lazy='dynamic')
+    videos = db.relationship('Video', backref='author', lazy='dynamic')
 
     def is_authenticated(self):
         return True
@@ -100,10 +101,11 @@ class Video(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
     category = db.Column(db.Integer)
-    thumbnail = db.Column(db.String)
     pub_date = db.Column(db.DateTime)
     youtube_id = db.Column(db.String)
     content = db.Column(db.String)
+    author_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    url = db.Column(db.String)
 
     def __repr__(self):
         return '<Video %r>' % (self.title)

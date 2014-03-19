@@ -90,12 +90,26 @@ class NewsFormDelete(Form):
 
 class VideoForm(Form):
     title = TextField('Title', validators=[Required()])
-    category = RadioField('Category', choices=[(1, 'Music Video'),
-                                               (2, 'Interview'),
-                                               (3, 'Writer Video')],
+    category = RadioField('Category', choices=[('1', 'Music Video'),
+                                               ('2', 'Interview'),
+                                               ('3', 'Writer Video')],
                           validators=[Required()])
     youtube_id = TextField('Youtube Video ID', validators=[Required()])
     content = TextAreaField('Content', validators=[Required()])
+
+
+class VideoFormEdit(Form):
+    title = TextField('Title', validators=[Required()])
+    category = RadioField('Category', choices=[('1', 'Music Video'),
+                                               ('2', 'Interview'),
+                                               ('3', 'Writer Video')],
+                          validators=[Required()])
+    youtube_id = TextField('Youtube Video ID', validators=[Required()])
+    content = TextAreaField('Content', validators=[Required()])
+
+
+class VideoFormDelete(Form):
+    pass
 
 
 class LoginValidator(object):
