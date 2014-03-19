@@ -1,0 +1,238 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<div class="row">
+    <div class="col-lg-8">
+        <h2>Music Videos</h2>
+    </div>
+
+
+{% if g.user != None and g.user.is_authenticated() %}
+    <div class="col-lg-4">
+        <div class="pull-right" style="padding-top:25px;">
+        <a href="{{ url_for('add_new_album_review') }}">
+        <button type="button" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span>
+            Add New Music Video
+        </button>
+        </a>
+        </div>
+    </div>
+{% endif %}
+
+</div>
+
+  <div class='row'>
+    <div class='col-md-12'>
+      <div class="carousel slide media-carousel" id="musicvideos">
+        <div class="carousel-inner">
+          <div class="item  active">
+            <div class="row">
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="row">
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="row">
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a data-slide="prev" href="#musicvideos" class="left carousel-control">‹</a>
+        <a data-slide="next" href="#musicvideos" class="right carousel-control">›</a>
+      </div>
+     </div>
+    </div>
+
+<div class="row">
+    <div class="col-lg-8">
+        <h2>Interviews</h2>
+    </div>
+
+
+{% if g.user != None and g.user.is_authenticated() %}
+    <div class="col-lg-4">
+        <div class="pull-right" style="padding-top:25px;">
+        <a href="{{ url_for('add_new_track_review') }}">
+        <button type="button" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span>
+            Add New Interview
+        </button>
+        </a>
+        </div>
+    </div>
+{% endif %}
+
+</div>
+
+
+ <div class='row'>
+    <div class='col-md-12'>
+      <div class="carousel slide media-carousel" id="interviews">
+        <div class="carousel-inner">
+          <div class="item active">
+            <div class="row">
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="row">
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="row">
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a data-slide="prev" href="#interviews" class="left carousel-control">‹</a>
+        <a data-slide="next" href="#interviews" class="right carousel-control">›</a>
+      </div>
+     </div>
+    </div>
+
+
+<div class="row">
+    <div class="col-lg-8">
+        <h2>Writer Videos</h2>
+    </div>
+
+
+{% if g.user != None and g.user.is_authenticated() %}
+    <div class="col-lg-4">
+        <div class="pull-right" style="padding-top:25px;">
+        <a href="{{ url_for('add_new_artist_review') }}">
+        <button type="button" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span>
+            Add New Writer Video
+        </button>
+        </a>
+        </div>
+    </div>
+{% endif %}
+</div>
+
+
+ <div class='row'>
+    <div class='col-md-12'>
+      <div class="carousel slide media-carousel" id="last">
+        <div class="carousel-inner">
+          <div class="item active">
+            <div class="row">
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="row">
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+            </div>
+          </div>
+          <div class="item">
+            <div class="row">
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+              <div class="col-sm-4">
+                <a class="thumbnail" href="#"><img alt="" src="http://placehold.it/250x150"></a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <a data-slide="prev" href="#last" class="left carousel-control">‹</a>
+        <a data-slide="next" href="#last" class="right carousel-control">›</a>
+      </div>
+     </div>
+
+</div>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $('#musicvideos').carousel({
+    pause: true,
+    interval: 8000,
+  });
+  $('#interviews').carousel({
+    pause: true,
+    interval: 8500,
+  });
+  $('#last').carousel({
+    pause: true,
+    interval: 8750,
+  });
+
+});
+</script>
+
+{% endblock %}

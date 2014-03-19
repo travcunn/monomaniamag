@@ -99,9 +99,11 @@ class Article(db.Model):
 class Video(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String)
+    category = db.Column(db.Integer)
     thumbnail = db.Column(db.String)
     pub_date = db.Column(db.DateTime)
-    url = db.Column(db.String)
+    youtube_id = db.Column(db.String)
+    content = db.Column(db.String)
 
     def __repr__(self):
         return '<Video %r>' % (self.title)

@@ -1,6 +1,6 @@
 from flask.ext.wtf import Form
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-from wtforms import BooleanField, TextAreaField, TextField
+from wtforms import BooleanField, RadioField, TextAreaField, TextField
 from wtforms.validators import Required
 
 from app import db
@@ -86,6 +86,16 @@ class NewsFormEdit(Form):
 
 class NewsFormDelete(Form):
     pass
+
+
+class VideoForm(Form):
+    title = TextField('Title', validators=[Required()])
+    category = RadioField('Category', choices=[(1, 'Music Video'),
+                                               (2, 'Interview'),
+                                               (3, 'Writer Video')],
+                          validators=[Required()])
+    youtube_id = TextField('Youtube Video ID', validators=[Required()])
+    content = TextAreaField('Content', validators=[Required()])
 
 
 class LoginValidator(object):

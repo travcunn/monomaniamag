@@ -13,13 +13,15 @@ from sqlalchemy.orm import defer
 
 from app import app, db, login_manager
 from config import ALBUM_REVIEWS_PER_PAGE, ARTIST_REVIEWS_PER_PAGE, \
-        NEWS_ARTICLES_PER_PAGE, TRACK_REVIEWS_PER_PAGE, REVIEWS_PER_PAGE
+        NEWS_ARTICLES_PER_PAGE, REVIEWS_PER_PAGE,TRACK_REVIEWS_PER_PAGE, \
+        VIDEOS_PER_PAGE
 from forms import AlbumReviewForm, AlbumReviewFormDelete, \
         AlbumReviewFormEdit, ArtistReviewForm, ArtistReviewFormDelete, \
-        ArtistReviewFormEdit, LoginValidator, NewsForm, NewsFormDelete, \
-        NewsFormEdit, TrackReviewForm, TrackReviewFormDelete, \
-        TrackReviewFormEdit
-from models import AlbumReview, Article, ArtistReview, TrackReview, User
+        ArtistReviewFormEdit, LoginValidator, NewsForm, \
+        NewsFormDelete, NewsFormEdit, TrackReviewForm, \
+        TrackReviewFormDelete, TrackReviewFormEdit, VideoForm
+from models import AlbumReview, Article, ArtistReview, TrackReview, User, \
+        Video
 
 
 login_manager.login_view = 'login'
@@ -176,6 +178,38 @@ def article_action(article_url, action):
                                         article_url=article.url))
         else:
             abort(404)
+
+@app.route('/videos')
+@app.route('/videos/page/<int:page>', methods = ['GET', 'POST'])
+def videos(page=1):
+    videos = Video.query.options(defer('content'))
+
+    ordered_videos = videos.order_by(Video.pub_date.desc())
+    panel_album_reviews = ordered_videos.paginate(page, VIDEOS_PER_PAGE,
+                                                  False)
+
+    return render_template('videos.html', news=panel_album_reviews)
+
+@app.route('/videos/new', methods=['GET', 'POST'])
+@login_required
+def add_video():
+    form = VideoForm()
+    if form.validate_on_submit():
+        article_url = form.title.data.replace(" ", "-").lower()
+
+        review = Article(page_title=form.title.data,
+                         preview=form.preview.data,
+                         featured=form.featured.data, photo=filename,
+                         content=form.content.data,
+                         pub_date=datetime.datetime.utcnow(),
+                         url=article_url, author=g.user)
+        db.session.add(review)
+        db.session.commit()
+        flash('The video was published.')
+        return redirect(url_for('videos'))
+
+    return render_template('new-video.html', title='Add Video',
+                           form=form)
 
 @app.route('/reviews')
 def reviews():
@@ -564,10 +598,6 @@ def artists():
 
 @app.route('/photos')
 def photos():
-    return redirect(url_for('album-reviews'))
-
-@app.route('/videos')
-def videos():
     return redirect(url_for('album-reviews'))
 
 @app.route('/admin')
