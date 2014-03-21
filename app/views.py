@@ -26,6 +26,20 @@ from models import AlbumReview, Article, ArtistReview, TrackReview, User, \
 
 login_manager.login_view = 'login'
 
+
+# patched article urls that have new urls
+@app.route('/reviews/veseria-voyager-album-review')
+def veseria():
+    return redirect('/reviews/album/veseria-voyager-album-review', 301)
+
+# patched article urls that have new urls
+@app.route('/reviews/jason-wells-the-modern-vintage-movement--album-review')
+def jason_wells():
+    return redirect('/reviews/album/jason-wells-the-modern-vintage-movement--album-review', 301)
+
+
+
+
 @app.route('/')
 def home():
 
@@ -323,6 +337,7 @@ def reviews():
                            album_reviews=shown_album_reviews,
                            track_reviews=shown_track_reviews,
                            artist_reviews=shown_artist_reviews)
+
 
 @app.route('/reviews/album')
 @app.route('/reviews/album/page/<int:page>', methods = ['GET'])
