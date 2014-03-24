@@ -53,7 +53,7 @@
 <div class="row">
     <div class="col-lg-6 col-lg-offset-1">
 <ul class="pager">
-{% if album_reviews.has_next %}<li class="next"><a href="{{ url_for('album_reviews', page=2) }}">Older Reviews &rarr;</a></li>{% endif %}
+{% if album_reviews.has_next %}<li class="next"><a href="{{ url_for('album_reviews') }}">All Reviews &rarr;</a></li>{% endif %}
 </ul>
 </div>
 </div>
@@ -111,7 +111,7 @@
 <div class="row">
     <div class="col-lg-6 col-lg-offset-1">
 <ul class="pager">
-{% if track_reviews.has_next %}<li class="next"><a href="{{ url_for('track_reviews', page=2) }}">Older Reviews &rarr;</a></li>{% endif %}
+{% if track_reviews.has_next %}<li class="next"><a href="{{ url_for('track_reviews') }}">All Reviews &rarr;</a></li>{% endif %}
 </ul>
 </div>
 </div>
@@ -172,7 +172,7 @@
 <div class="row">
     <div class="col-lg-6 col-lg-offset-1">
 <ul class="pager">
-{% if artist_reviews.has_next %}<li class="next"><a href="{{ url_for('artist_reviews', page=2) }}">Older Reviews &rarr;</a></li>{% endif %}
+{% if artist_reviews.has_next %}<li class="next"><a href="{{ url_for('artist_reviews') }}">All Reviews &rarr;</a></li>{% endif %}
 </ul>
 </div>
 </div>

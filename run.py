@@ -7,6 +7,6 @@ from app import app
 # This should only be used to launch the development version
 
 app.debug = True
-#toolbar = DebugToolbarExtension(app)
+toolbar = DebugToolbarExtension(app)
 
-app.run(host='0.0.0.0')
+app.run(host='0.0.0.0', port=8000)
