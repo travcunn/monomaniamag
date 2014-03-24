@@ -44,6 +44,18 @@ def dandy_warhols():
     return redirect('/reviews/album/the-dandy-warhols-thirteen-tales-from-urban-bohemia--album-review', 301)
 
 
+# patched article urls that have new urls
+@app.route('/reviews/beck-morning-phase-album-review')
+def beck():
+    return redirect('/reviews/album/beck-morning-phase-album-review', 301)
+
+
+# patched article urls that have new urls
+@app.route('/reviews/grouplove-spreading-rumours-album-review')
+def grouplove():
+    return redirect('/reviews/album/grouplove-spreading-rumours-album-review', 301)
+
+
 @app.route('/')
 def home():
 
