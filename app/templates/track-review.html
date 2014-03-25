@@ -77,9 +77,19 @@
             </div>
         </div>
         <hr>
-        <div class="row">
+         <div class="row">
             <div class="col-sm-12">
-                <p><em>By</em> <strong>{{ review.author.realname }}</strong></p>
+                <div class="row">
+                    <div class="col-lg-6">
+                        <p><em>By</em> <strong>{{ review.author.realname }}</strong></p>
+                    </div>
+                    <div class="col-lg-6" id="sharedcount">
+                        <a href="https://twitter.com/intent/tweet?&related=monomaniamag&url=http://monomaniamag.com{{ url_for('single_track_review', review_url=review.url) }}&text={{ review.page_title }}&" class="btn btn-default twitter" target="_blank"><i class="fa fa-twitter fa-fw"></i>Tweet<span class="badge" id="tweets"></span></a>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u=http://monomaniamag.com{{ url_for('single_track_review', review_url=review.url) }}" class="btn btn-default facebook" target="_blank"><i class="fa fa-facebook fa-fw"></i>Share<span class="badge" id="likes"></span></a>
+                    <a href="https://plus.google.com/share?url=http://monomaniamag.com{{ url_for('single_track_review', review_url=review.url) }}" onclick="javascript:window.open(this.href,
+                    '', 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');return false;" class="btn btn-default googleplus" target="_blank"><i class="fa fa-google-plus fa-fw"></i>Post <span class="badge" id="plusones"></span></a>
+                     </div>
+                </div>
                 <p><small>{{ momentjs(review.pub_date).format('LL') }}</small></p>
                 <p>{{ review.content|safe }}</p>
             </div>
