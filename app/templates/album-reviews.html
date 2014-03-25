@@ -53,8 +53,8 @@
 <div class="row">
     <div class="col-lg-6 col-lg-offset-3 col-md-6 col-md-offset-3">
 <ul class="pager">
-{% if reviews.has_prev %}<li class="previous"><a href="{{ url_for('reviews', page=reviews.prev_num) }}">&larr; Newer Reviews</a></li>{% endif %}
-{% if reviews.has_next %}<li class="next"><a href="{{ url_for('reviews', page=reviews.next_num) }}">Older Reviews &rarr;</a></li>{% endif %}
+{% if reviews.has_prev %}<li class="previous"><a href="{{ url_for('album_reviews', page=reviews.prev_num) }}">&larr; Newer Reviews</a></li>{% endif %}
+{% if reviews.has_next %}<li class="next"><a href="{{ url_for('album_reviews', page=reviews.next_num) }}">Older Reviews &rarr;</a></li>{% endif %}
 </ul>
 </div>
 </div>
