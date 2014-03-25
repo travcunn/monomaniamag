@@ -31,6 +31,9 @@ a.thumbnail:hover {
   color: #FFFFFF;
   text-decoration: None;
 }
+.navbar-header {
+    text-shadow: 0 -1px 0 rgb(207, 132, 172), 0 1px 0 rgb(142, 9, 78), 0 0 40px rgba(0, 0, 0, 1);
+}
 
 a.panel-title:hover {
   color:white;}
@@ -139,11 +142,16 @@ a.panel-title:hover {
 
 
 /* carousel */
-.media-carousel 
+.media-carousel
 {
   margin-bottom: 0;
   padding: 0 40px 30px 40px;
   margin-top: 30px;
+}
+/* caption */
+.carousel-caption
+{
+    text-shadow: 0 -1px 0 rgb(207, 132, 172), 0 1px 0 rgb(142, 9, 78), 0 0 40px rgba(0, 0, 0, 1);
 }
 /* Previous button  */
 .media-carousel .carousel-control.left 
