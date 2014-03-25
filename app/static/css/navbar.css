@@ -3,6 +3,7 @@ body {
   font-size: 16px;
   color: #393e46;
   background-color: #333333;
+  background: url(/static/images/bg.png) repeat;
 }
 
 a.thumbnail:hover {
@@ -18,7 +19,7 @@ a.thumbnail:hover {
 }
 
 .page-header {
-  background-color: #333333;
+  background: url(/static/images/bg.png) repeat;
   padding-top:25px;
   margin-top: 0px;
   margin-left:-15px;
