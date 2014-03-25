@@ -39,7 +39,7 @@ a.panel-title:hover {
   padding-top: 40px;
   padding-bottom: 40px;
   margin-top: 40px;
-  border-top: 1px solid #eee;
+  //border-top: 1px solid #eee;
 }
 
 .nav > li> a {
@@ -208,4 +208,19 @@ a.panel-title:hover {
 .video-front
 {
   margin-bottom:0px;
+}
+
+.vid {
+    position: relative;
+    padding-bottom: 56.25%;
+    padding-top: 30px; height: 0; overflow: hidden;
+}
+.vid iframe,
+.vid object,
+.vid embed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
 }

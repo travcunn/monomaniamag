@@ -1,0 +1,27 @@
+.btn.twitter {
+    background-color: #55acee;
+    color: #fff;
+    border: none;
+}
+.btn.facebook {
+    background-color: #3b5998;
+    color: #fff;
+    border: none;
+}
+.btn.googleplus {
+    background-color: #d94834;
+    color: #fff;
+    border: none;
+}
+.twitter .badge, .facebook .badge, .googleplus .badge {
+    font-weight: normal;
+    background-color: #fff;
+    color: gray;
+}
+li,p {
+    font-size: 17px;
+    font-weight: 300;
+}
+.fa {
+    margin-right: 8px;
+}
