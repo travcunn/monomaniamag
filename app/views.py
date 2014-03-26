@@ -55,6 +55,11 @@ def beck():
 def grouplove():
     return redirect('/reviews/album/grouplove-spreading-rumours-album-review', 301)
 
+# patched article urls that have new urls
+@app.route('/reviews/broken-bells-after-the-disco-%28by-ben-blackburn%29-album-review')
+def broken_bells():
+    return redirect('/reviews/album/broken-bells-after-the-disco-%28by-ben-blackburn%29-album-review', 301)
+
 
 @app.route('/')
 def home():
