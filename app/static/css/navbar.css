@@ -32,8 +32,15 @@ a.thumbnail:hover {
   color: #FFFFFF;
   text-decoration: None;
 }
+.navbar-header > a > h2 {
+  font-family: "Oleo Script", cursive, sans-serif;
+  text-align: left;
+  font-size: 56px;
+  color: rgb(52, 152, 219);
+  text-shadow: 0 0 40px rgba(0, 0, 0, 1);
+}
+
 .navbar-header {
-    text-shadow: 0 -1px 0 rgb(207, 132, 172), 0 1px 0 rgb(142, 9, 78), 0 0 40px rgba(0, 0, 0, 1);
 }
 
 a.panel-title:hover {
@@ -152,7 +159,7 @@ a.panel-title:hover {
 /* caption */
 .carousel-caption
 {
-    text-shadow: 0 -1px 0 rgb(207, 132, 172), 0 1px 0 rgb(142, 9, 78), 0 0 40px rgba(0, 0, 0, 1);
+    text-shadow: 0 0 40px rgba(0, 0, 0, 1);
 }
 /* Previous button  */
 .media-carousel .carousel-control.left 

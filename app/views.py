@@ -37,18 +37,15 @@ def veseria():
 def jason_wells():
     return redirect('/reviews/album/jason-wells-the-modern-vintage-movement--album-review', 301)
 
-
 # patched article urls that have new urls
 @app.route('/reviews/the-dandy-warhols-thirteen-tales-from-urban-bohemia--album-review')
 def dandy_warhols():
     return redirect('/reviews/album/the-dandy-warhols-thirteen-tales-from-urban-bohemia--album-review', 301)
 
-
 # patched article urls that have new urls
 @app.route('/reviews/beck-morning-phase-album-review')
 def beck():
     return redirect('/reviews/album/beck-morning-phase-album-review', 301)
-
 
 # patched article urls that have new urls
 @app.route('/reviews/grouplove-spreading-rumours-album-review')
