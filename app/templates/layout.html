@@ -12,12 +12,11 @@
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="/static/css/bootstrap-base.css">
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <!-- Logo font -->
     <link href="http://fonts.googleapis.com/css?family=Oleo+Script" rel="stylesheet" type="text/css" data-noprefix>
-
     {% if g.user != None and g.user.is_authenticated() %}
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap3-wysihtml5.min.css">
     {% endif %}
-
     <!-- animation css -->
     <link href="/static/css/animate.css" rel="stylesheet">
     <!-- Custom styles for this template -->
@@ -25,10 +24,14 @@
     <link href="/static/css/stories.css" rel="stylesheet">
     <link href="/static/css/social.css" rel="stylesheet">
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-    <script src="/static/js/bootstrap.min.js"></script>
-
     <script src="/static/js/moment.min.js"></script>
+
+    <!-- If you use Internet Explorer, please get a grip on reality. Instead, use chrome or firefox. -->
+    <!-- We dont give a fuck about IE. Chrome (or webkit based browsers) and Firefox
+    are innovating the web for tomorrow. Internet Explorer is consistently > 1 month behind other browsers.
+    Stop waiting for Microsoft to play catch up. -->
+    <!-- If this website doesn't work with Internet Explorer, then go elsewhere. -->
+
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!--[if lt IE 9]>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
@@ -63,7 +66,7 @@
       <span class="icon-bar"></span>
     </button>
     <a href="{{ url_for('home') }}">
-    <h2 class="tlt" data-in-effect="pulse">MONOMANIA</h2><h5>Music Magazine</h5>
+      <h2 class="tlt" data-in-effect="pulse">MONOMANIA</h2><h5>Music Magazine</h5>
     </a>
 </div>
   <div class="navbar-collapse collapse navbar-responsive-collapse">
@@ -94,44 +97,44 @@
 
     </div>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
     <script>
     $.getScript('//cdn.jsdelivr.net/isotope/1.5.25/jquery.isotope.min.js',function(){
         $('#reviews').isotope({
             itemSelector : '.item'
         });
     });
-  </script>
-  <script src="/static/js/jquery.fittext.js"></script>
-  <script src="/static/js/jquery.lettering.js"></script>
-  <script src="/static/js/jquery.textillate.js"></script>
-  <script>
-$('.tlt').textillate({
-  selector: '.texts',
-  loop: true,
-  minDisplayTime: 2000,
-  initialDelay: 0,
-  autoStart: true,
-  inEffects: [],
-  outEffects: [],
+    </script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery.fittext.js"></script>
+    <script src="/static/js/jquery.lettering.js"></script>
+    <script src="/static/js/jquery.textillate.js"></script>
+    <script>
+    $('.tlt').textillate({
+      selector: '.texts',
+      loop: true,
+      minDisplayTime: 2000,
+      initialDelay: 0,
+      autoStart: true,
+      inEffects: [],
+      outEffects: [],
 
-  // in animation settings
-  in: {
-    effect: 'pulse',
-    delayScale: 1.5,
-    delay: 50,
-    sync: false,
-    shuffle: false,
-    reverse: false,
-    callback: function () {}
-  },
+      // in animation settings
+      in: {
+        effect: 'pulse',
+        delayScale: 1.5,
+        delay: 50,
+        sync: false,
+        shuffle: false,
+        reverse: false,
+        callback: function () {}
+      },
+      out: {
+        effect: '',
+      },
 
-  out: {
-    effect: '',
-  },
-
-  callback: function () {}
-});
-  
-  </script>
-</body>
+      callback: function () {}
+    });
+    </script>
+  </body>
 </html>
