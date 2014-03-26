@@ -18,6 +18,8 @@
     <link rel="stylesheet" type="text/css" href="/static/css/bootstrap3-wysihtml5.min.css">
     {% endif %}
 
+    <!-- animation css -->
+    <link href="/static/css/animate.css" rel="stylesheet">
     <!-- Custom styles for this template -->
     <link href="/static/css/navbar.css" rel="stylesheet">
     <link href="/static/css/stories.css" rel="stylesheet">
@@ -61,7 +63,7 @@
       <span class="icon-bar"></span>
     </button>
     <a href="{{ url_for('home') }}">
-    <h2>MONOMANIA</h2><h5>Music Magazine</h5>
+    <h2 class="tlt" data-in-effect="pulse">MONOMANIA</h2><h5>Music Magazine</h5>
     </a>
 </div>
   <div class="navbar-collapse collapse navbar-responsive-collapse">
@@ -98,6 +100,38 @@
             itemSelector : '.item'
         });
     });
-    </script>
+  </script>
+  <script src="/static/js/jquery.fittext.js"></script>
+  <script src="/static/js/jquery.lettering.js"></script>
+  <script src="/static/js/jquery.textillate.js"></script>
+  <script>
+$('.tlt').textillate({
+  selector: '.texts',
+  loop: true,
+  minDisplayTime: 2000,
+  initialDelay: 0,
+  autoStart: true,
+  inEffects: [],
+  outEffects: [],
+
+  // in animation settings
+  in: {
+    effect: 'pulse',
+    delayScale: 1.5,
+    delay: 50,
+    sync: false,
+    shuffle: false,
+    reverse: false,
+    callback: function () {}
+  },
+
+  out: {
+    effect: '',
+  },
+
+  callback: function () {}
+});
+  
+  </script>
 </body>
 </html>
