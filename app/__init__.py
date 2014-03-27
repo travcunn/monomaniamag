@@ -12,9 +12,12 @@ app.wsgi_app = ProxyFix(app.wsgi_app)
 login_manager = LoginManager(app)
 login_manager.session_protection = "strong"
 
+"""
 cache_config = {'CACHE_TYPE': 'RedisCache',
                 'CACHE_REDIS_HOST': '127.0.0.1',
                 'CACHE_KEY_PREFIX': 'sitecache'}
+"""
+cache_config = {'CACHE_TYPE': 'simple'}
 cache = Cache(app, config=cache_config)
 db = SQLAlchemy(app)
 
