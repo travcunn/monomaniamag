@@ -797,7 +797,6 @@ def login():
 @app.route("/logout")
 def logout():
     logout_user()
-    flash("You have logged out.", 'info')
     return redirect(url_for('home'))
 
 @login_manager.user_loader
