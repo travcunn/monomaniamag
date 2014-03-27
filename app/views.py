@@ -172,6 +172,7 @@ def add_news():
         db.session.add(review)
         db.session.commit()
         flash('The news article was created and published.')
+        cache.clear()
         return redirect(url_for('news'))
 
     return render_template('new-news-article.html', title='Add News Article',
@@ -218,6 +219,7 @@ def article_action(article_url, action):
                 db.session.commit()
 
                 flash('Saved successfully.', 'success')
+                cache.clear()
                 return redirect(url_for('single_news_article',
                                         article_url=article.url))
 
@@ -242,6 +244,7 @@ def article_action(article_url, action):
                 db.session.commit()
 
                 flash('Deleted successfully.', 'success')
+                cache.clear()
                 return redirect(url_for('news'))
             else:
                 return redirect(url_for('single_news_article',
@@ -304,6 +307,7 @@ def add_video():
         db.session.add(video)
         db.session.commit()
         flash('The video was published.')
+        cache.clear()
         return redirect(url_for('videos'))
 
     return render_template('new-video.html', title='Add Video',
@@ -334,6 +338,7 @@ def video_action(video_url, action):
                 db.session.commit()
 
                 flash('Saved successfully.', 'success')
+                cache.clear()
                 return redirect(url_for('single_album_review',
                                         review_url=review.url))
 
@@ -358,6 +363,7 @@ def video_action(video_url, action):
                 db.session.commit()
 
                 flash('Deleted successfully.', 'success')
+                cache.clear()
                 return redirect(url_for('album_reviews'))
             else:
                 return redirect(url_for('single_album_review',
@@ -525,6 +531,7 @@ def album_review_action(review_url, action):
                 db.session.commit()
 
                 flash('Saved successfully.', 'success')
+                cache.clear()
                 return redirect(url_for('single_album_review',
                                         review_url=review.url))
 
@@ -549,6 +556,7 @@ def album_review_action(review_url, action):
                 db.session.commit()
 
                 flash('Deleted successfully.', 'success')
+                cache.clear()
                 return redirect(url_for('album_reviews'))
             else:
                 return redirect(url_for('single_album_review',
@@ -578,6 +586,7 @@ def artist_review_action(review_url, action):
                 db.session.commit()
 
                 flash('Saved successfully.', 'success')
+                cache.clear()
                 return redirect(url_for('single_artist_review',
                                         review_url=review.url))
 
@@ -602,6 +611,7 @@ def artist_review_action(review_url, action):
                 db.session.commit()
 
                 flash('Deleted successfully.', 'success')
+                cache.clear()
                 return redirect(url_for('artist_reviews'))
             else:
                 return redirect(url_for('single_artist_review',
@@ -635,6 +645,7 @@ def track_review_action(review_url, action):
                 db.session.commit()
 
                 flash('Saved successfully.', 'success')
+                cache.clear()
                 return redirect(url_for('single_track_review',
                                         review_url=review.url))
 
@@ -659,6 +670,7 @@ def track_review_action(review_url, action):
                 db.session.commit()
 
                 flash('Deleted successfully.', 'success')
+                cache.clear()
                 return redirect(url_for('track_reviews'))
             else:
                 return redirect(url_for('single_track_review',
@@ -691,6 +703,7 @@ def add_new_album_review():
         db.session.add(review)
         db.session.commit()
         flash('The album review was created and published.')
+        cache.clear()
         return redirect(url_for('reviews'))
 
     return render_template('new-album-review.html', title='Add New Review',
@@ -723,6 +736,7 @@ def add_new_track_review():
         db.session.add(review)
         db.session.commit()
         flash('The track review was created and published.')
+        cache.clear()
         return redirect(url_for('reviews'))
 
     return render_template('new-track-review.html', title='Add New Review',
@@ -753,6 +767,7 @@ def add_new_artist_review():
         db.session.add(review)
         db.session.commit()
         flash('The artist review was created and published.')
+        cache.clear()
         return redirect(url_for('reviews'))
 
     return render_template('new-artist-review.html', title='Add New Review',
