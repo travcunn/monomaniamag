@@ -74,7 +74,7 @@ def broken_bells():
 
 
 @app.route('/')
-@cache.cached(timeout=120, unless=is_logged_in)
+@cache.cached(timeout=600, unless=is_logged_in)
 def home():
 
     first_featured = Article.query.options(defer('content'))
@@ -138,7 +138,7 @@ def home():
 
 @app.route('/news')
 @app.route('/news/page/<int:page>', methods = ['GET'])
-@cache.cached(timeout=120, unless=is_logged_in)
+@cache.cached(timeout=600, unless=is_logged_in)
 def news(page=1):
     album_reviews = Article.query.options(defer('content'))
 
@@ -179,7 +179,7 @@ def add_news():
                            form=form)
 
 @app.route('/news/<article_url>')
-@cache.cached(timeout=120, unless=is_logged_in)
+@cache.cached(timeout=600, unless=is_logged_in)
 def single_news_article(article_url):
     article = Article.query.filter_by(url=article_url).first()
     if article is None:
@@ -253,7 +253,7 @@ def article_action(article_url, action):
             abort(404)
 
 @app.route('/videos')
-@cache.cached(timeout=120, unless=is_logged_in)
+@cache.cached(timeout=600, unless=is_logged_in)
 def videos():
     videos_first = Video.query.options(defer('content')).filter_by(category=1)
     ordered_videos = videos_first.order_by(Video.pub_date.desc())
@@ -280,7 +280,7 @@ def videos():
                            videos8=videos8, videos9=videos9)
 
 @app.route('/videos/<video_url>')
-@cache.cached(timeout=120, unless=is_logged_in)
+@cache.cached(timeout=600, unless=is_logged_in)
 def single_video(video_url):
     video = Video.query.filter_by(url=video_url).first()
     if video is None:
@@ -372,7 +372,7 @@ def video_action(video_url, action):
             abort(404)
 
 @app.route('/reviews')
-@cache.cached(timeout=120, unless=is_logged_in)
+@cache.cached(timeout=600, unless=is_logged_in)
 def reviews():
     album_reviews = AlbumReview.query.options(defer('content'))
     sorted_album_reviews = album_reviews.order_by(AlbumReview.pub_date.desc())
@@ -400,7 +400,7 @@ def reviews():
 
 @app.route('/reviews/album')
 @app.route('/reviews/album/page/<int:page>', methods = ['GET'])
-@cache.cached(timeout=120, unless=is_logged_in)
+@cache.cached(timeout=600, unless=is_logged_in)
 def album_reviews(page=1):
     reviews = AlbumReview.query.options(defer('content'))
     sorted_reviews = reviews.order_by(AlbumReview.pub_date.desc())
@@ -417,7 +417,7 @@ def album_reviews(page=1):
 
 @app.route('/reviews/track')
 @app.route('/reviews/track/page/<int:page>', methods = ['GET'])
-@cache.cached(timeout=120, unless=is_logged_in)
+@cache.cached(timeout=600, unless=is_logged_in)
 def track_reviews(page=1):
     reviews = TrackReview.query.options(defer('content'))
     sorted_reviews = reviews.order_by(TrackReview.pub_date.desc())
@@ -434,7 +434,7 @@ def track_reviews(page=1):
 
 @app.route('/reviews/artist')
 @app.route('/reviews/artist/page/<int:page>', methods = ['GET'])
-@cache.cached(timeout=120, unless=is_logged_in)
+@cache.cached(timeout=600, unless=is_logged_in)
 def artist_reviews(page=1):
     reviews = ArtistReview.query.options(defer('content'))
     sorted_reviews = reviews.order_by(ArtistReview.pub_date.desc())
@@ -450,7 +450,7 @@ def artist_reviews(page=1):
                            reviews=shown_reviews)
 
 @app.route('/reviews/album/<review_url>')
-@cache.cached(timeout=120, unless=is_logged_in)
+@cache.cached(timeout=600, unless=is_logged_in)
 def single_album_review(review_url):
     review = AlbumReview.query.filter_by(url=review_url).first()
     if review is None:
@@ -469,7 +469,7 @@ def single_album_review(review_url):
                            delete_form=delete_form, image=img_path)
 
 @app.route('/reviews/track/<review_url>')
-@cache.cached(timeout=120, unless=is_logged_in)
+@cache.cached(timeout=600, unless=is_logged_in)
 def single_track_review(review_url):
     review = TrackReview.query.filter_by(url=review_url).first()
     if review is None:
@@ -488,7 +488,7 @@ def single_track_review(review_url):
                            delete_form=delete_form, image=img_path)
 
 @app.route('/reviews/artist/<review_url>')
-@cache.cached(timeout=120, unless=is_logged_in)
+@cache.cached(timeout=600, unless=is_logged_in)
 def single_artist_review(review_url):
     review = ArtistReview.query.filter_by(url=review_url).first()
     if review is None:
