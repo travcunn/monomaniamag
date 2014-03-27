@@ -37,23 +37,25 @@ def veseria():
 def jason_wells():
     return redirect('/reviews/album/jason-wells-the-modern-vintage-movement--album-review', 301)
 
-
 # patched article urls that have new urls
 @app.route('/reviews/the-dandy-warhols-thirteen-tales-from-urban-bohemia--album-review')
 def dandy_warhols():
     return redirect('/reviews/album/the-dandy-warhols-thirteen-tales-from-urban-bohemia--album-review', 301)
-
 
 # patched article urls that have new urls
 @app.route('/reviews/beck-morning-phase-album-review')
 def beck():
     return redirect('/reviews/album/beck-morning-phase-album-review', 301)
 
-
 # patched article urls that have new urls
 @app.route('/reviews/grouplove-spreading-rumours-album-review')
 def grouplove():
     return redirect('/reviews/album/grouplove-spreading-rumours-album-review', 301)
+
+# patched article urls that have new urls
+@app.route('/reviews/broken-bells-after-the-disco-%28by-ben-blackburn%29-album-review')
+def broken_bells():
+    return redirect('/reviews/album/broken-bells-after-the-disco-%28by-ben-blackburn%29-album-review', 301)
 
 
 @app.route('/')
@@ -97,6 +99,17 @@ def home():
     shown_videos1 = ordered_videos.paginate(1, 3, False)
     shown_videos2 = ordered_videos.paginate(2, 3, False)
 
+    recent_reviews = []
+    for review in panel_album_reviews.items:
+        recent_reviews.append(review)
+    for review in panel_track_reviews.items:
+        recent_reviews.append(review)
+    for review in panel_artist_reviews.items:
+        recent_reviews.append(review)
+    recent_reviews.sort(key=lambda review: review.pub_date, reverse=True)
+    # grab the latest 4 of all of the sorted reviews gathered
+    recent_reviews = recent_reviews[:4]
+
     return render_template('home.html',
                            panel_album_reviews=panel_album_reviews,
                            panel_track_reviews=panel_track_reviews,
@@ -104,7 +117,8 @@ def home():
                            one_featured=one_featured,
                            featured_news=featured_news,
                            news=panel_news, videos1=shown_videos1,
-                           videos2=shown_videos2)
+                           videos2=shown_videos2,
+                           recent_reviews=recent_reviews)
 
 @app.route('/news')
 @app.route('/news/page/<int:page>', methods = ['GET'])
@@ -158,9 +172,12 @@ def single_news_article(article_url):
 
     delete_form = NewsFormDelete()
 
+    img_path = "http://monomaniamag.com/static/news/" + article.photo
+
     return render_template('news-article.html', title=article.page_title,
                            article=article, side_articles=shown_side_articles,
-                           delete_form=delete_form)
+                           delete_form=delete_form,
+                           image=img_path)
 
 
 @app.route('/news/<article_url>/<action>', methods=['GET', 'POST'])
@@ -415,9 +432,11 @@ def single_album_review(review_url):
 
     delete_form = AlbumReviewFormDelete()
 
+    img_path = "http://monomaniamag.com/static/reviews/" + review.photo
+
     return render_template('album-review.html', title=review.page_title,
                            review=review, side_reviews=shown_side_reviews,
-                           delete_form=delete_form)
+                           delete_form=delete_form, image=img_path)
 
 @app.route('/reviews/track/<review_url>')
 def single_track_review(review_url):
@@ -431,9 +450,11 @@ def single_track_review(review_url):
 
     delete_form = TrackReviewFormDelete()
 
+    img_path = "http://monomaniamag.com/static/reviews/" + review.photo
+
     return render_template('track-review.html', title=review.page_title,
                            review=review, side_reviews=shown_side_reviews,
-                           delete_form=delete_form)
+                           delete_form=delete_form, image=img_path)
 
 @app.route('/reviews/artist/<review_url>')
 def single_artist_review(review_url):
@@ -447,9 +468,11 @@ def single_artist_review(review_url):
 
     delete_form = ArtistReviewFormDelete()
 
+    img_path = "http://monomaniamag.com/static/reviews/" + article.photo
+
     return render_template('artist-review.html', title=review.page_title,
                            review=review, side_reviews=shown_side_reviews,
-                           delete_form=delete_form)
+                           delete_form=delete_form, image=img_path)
 
 @app.route('/reviews/album/<review_url>/<action>', methods=['GET', 'POST'])
 def album_review_action(review_url, action):
