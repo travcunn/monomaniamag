@@ -38,9 +38,9 @@ def generate_recent_url(model):
 app.jinja_env.globals.update(generate_recent_url=generate_recent_url)
 
 def is_logged_in():
-    if g.user is not None:
+    if g.user is not None and g.user.is_authenticated():
         return True
-    return False
+    return None
 
 # patched article urls that have new urls
 @app.route('/reviews/veseria-voyager-album-review')
@@ -73,8 +73,8 @@ def broken_bells():
     return redirect('/reviews/album/broken-bells-after-the-disco-%28by-ben-blackburn%29-album-review', 301)
 
 
-@cache.cached(timeout=120, unless=is_logged_in)
 @app.route('/')
+@cache.cached(timeout=120, unless=is_logged_in)
 def home():
 
     first_featured = Article.query.options(defer('content'))
@@ -136,9 +136,9 @@ def home():
                            videos2=shown_videos2,
                            recent_reviews=recent_reviews)
 
-@cache.cached(timeout=120, unless=is_logged_in)
 @app.route('/news')
 @app.route('/news/page/<int:page>', methods = ['GET'])
+@cache.cached(timeout=120, unless=is_logged_in)
 def news(page=1):
     album_reviews = Article.query.options(defer('content'))
 
@@ -177,8 +177,8 @@ def add_news():
     return render_template('new-news-article.html', title='Add News Article',
                            form=form)
 
-@cache.cached(timeout=120, unless=is_logged_in)
 @app.route('/news/<article_url>')
+@cache.cached(timeout=120, unless=is_logged_in)
 def single_news_article(article_url):
     article = Article.query.filter_by(url=article_url).first()
     if article is None:
@@ -249,8 +249,8 @@ def article_action(article_url, action):
         else:
             abort(404)
 
-@cache.cached(timeout=120, unless=is_logged_in)
 @app.route('/videos')
+@cache.cached(timeout=120, unless=is_logged_in)
 def videos():
     videos_first = Video.query.options(defer('content')).filter_by(category=1)
     ordered_videos = videos_first.order_by(Video.pub_date.desc())
@@ -276,8 +276,8 @@ def videos():
                            videos5=videos5, videos6=videos6, videos7=videos7,
                            videos8=videos8, videos9=videos9)
 
-@cache.cached(timeout=120, unless=is_logged_in)
 @app.route('/videos/<video_url>')
+@cache.cached(timeout=120, unless=is_logged_in)
 def single_video(video_url):
     video = Video.query.filter_by(url=video_url).first()
     if video is None:
@@ -365,8 +365,8 @@ def video_action(video_url, action):
         else:
             abort(404)
 
-@cache.cached(timeout=120, unless=is_logged_in)
 @app.route('/reviews')
+@cache.cached(timeout=120, unless=is_logged_in)
 def reviews():
     album_reviews = AlbumReview.query.options(defer('content'))
     sorted_album_reviews = album_reviews.order_by(AlbumReview.pub_date.desc())
@@ -392,9 +392,9 @@ def reviews():
                            track_reviews=shown_track_reviews,
                            artist_reviews=shown_artist_reviews)
 
-@cache.cached(timeout=120, unless=is_logged_in)
 @app.route('/reviews/album')
 @app.route('/reviews/album/page/<int:page>', methods = ['GET'])
+@cache.cached(timeout=120, unless=is_logged_in)
 def album_reviews(page=1):
     reviews = AlbumReview.query.options(defer('content'))
     sorted_reviews = reviews.order_by(AlbumReview.pub_date.desc())
@@ -409,9 +409,9 @@ def album_reviews(page=1):
     return render_template('album-reviews.html', title='Album Reviews',
                            reviews=shown_reviews)
 
-@cache.cached(timeout=120, unless=is_logged_in)
 @app.route('/reviews/track')
 @app.route('/reviews/track/page/<int:page>', methods = ['GET'])
+@cache.cached(timeout=120, unless=is_logged_in)
 def track_reviews(page=1):
     reviews = TrackReview.query.options(defer('content'))
     sorted_reviews = reviews.order_by(TrackReview.pub_date.desc())
@@ -426,9 +426,9 @@ def track_reviews(page=1):
     return render_template('track-reviews.html', title='Track Reviews',
                            reviews=shown_reviews)
 
-@cache.cached(timeout=120, unless=is_logged_in)
 @app.route('/reviews/artist')
 @app.route('/reviews/artist/page/<int:page>', methods = ['GET'])
+@cache.cached(timeout=120, unless=is_logged_in)
 def artist_reviews(page=1):
     reviews = ArtistReview.query.options(defer('content'))
     sorted_reviews = reviews.order_by(ArtistReview.pub_date.desc())
@@ -443,8 +443,8 @@ def artist_reviews(page=1):
     return render_template('artist-reviews.html', title='Artist Reviews',
                            reviews=shown_reviews)
 
-@cache.cached(timeout=120, unless=is_logged_in)
 @app.route('/reviews/album/<review_url>')
+@cache.cached(timeout=120, unless=is_logged_in)
 def single_album_review(review_url):
     review = AlbumReview.query.filter_by(url=review_url).first()
     if review is None:
@@ -462,8 +462,8 @@ def single_album_review(review_url):
                            review=review, side_reviews=shown_side_reviews,
                            delete_form=delete_form, image=img_path)
 
-@cache.cached(timeout=120, unless=is_logged_in)
 @app.route('/reviews/track/<review_url>')
+@cache.cached(timeout=120, unless=is_logged_in)
 def single_track_review(review_url):
     review = TrackReview.query.filter_by(url=review_url).first()
     if review is None:
@@ -481,8 +481,8 @@ def single_track_review(review_url):
                            review=review, side_reviews=shown_side_reviews,
                            delete_form=delete_form, image=img_path)
 
-@cache.cached(timeout=120, unless=is_logged_in)
 @app.route('/reviews/artist/<review_url>')
+@cache.cached(timeout=120, unless=is_logged_in)
 def single_artist_review(review_url):
     review = ArtistReview.query.filter_by(url=review_url).first()
     if review is None:
