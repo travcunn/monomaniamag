@@ -27,6 +27,17 @@ from models import AlbumReview, Article, ArtistReview, TrackReview, User, \
 login_manager.login_view = 'login'
 
 
+def generate_recent_url(model):
+    if isinstance(model, AlbumReview):
+        return url_for('single_album_review', review_url=model.url)
+    elif isinstance(model, ArtistReview):
+        return url_for('single_artist_review', review_url=model.url);
+    elif isinstance(model, TrackReview):
+        return url_for('single_track_review', review_url=model.url)
+
+app.jinja_env.globals.update(generate_recent_url=generate_recent_url)
+
+
 # patched article urls that have new urls
 @app.route('/reviews/veseria-voyager-album-review')
 def veseria():
@@ -468,7 +479,7 @@ def single_artist_review(review_url):
 
     delete_form = ArtistReviewFormDelete()
 
-    img_path = "http://monomaniamag.com/static/reviews/" + article.photo
+    img_path = "http://monomaniamag.com/static/reviews/" + review.photo
 
     return render_template('artist-review.html', title=review.page_title,
                            review=review, side_reviews=shown_side_reviews,
