@@ -99,6 +99,17 @@ def home():
     shown_videos1 = ordered_videos.paginate(1, 3, False)
     shown_videos2 = ordered_videos.paginate(2, 3, False)
 
+    recent_reviews = []
+    for review in panel_album_reviews.items:
+        recent_reviews.append(review)
+    for review in panel_track_reviews.items:
+        recent_reviews.append(review)
+    for review in panel_artist_reviews.items:
+        recent_reviews.append(review)
+    recent_reviews.sort(key=lambda review: review.pub_date, reverse=True)
+    # grab the latest 4 of all of the sorted reviews gathered
+    recent_reviews = recent_reviews[:4]
+
     return render_template('home.html',
                            panel_album_reviews=panel_album_reviews,
                            panel_track_reviews=panel_track_reviews,
@@ -106,7 +117,8 @@ def home():
                            one_featured=one_featured,
                            featured_news=featured_news,
                            news=panel_news, videos1=shown_videos1,
-                           videos2=shown_videos2)
+                           videos2=shown_videos2,
+                           recent_reviews=recent_reviews)
 
 @app.route('/news')
 @app.route('/news/page/<int:page>', methods = ['GET'])
