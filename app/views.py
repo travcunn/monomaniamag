@@ -172,9 +172,12 @@ def single_news_article(article_url):
 
     delete_form = NewsFormDelete()
 
+    img_path = "http://monomaniamag.com/static/news/" + article.photo
+
     return render_template('news-article.html', title=article.page_title,
                            article=article, side_articles=shown_side_articles,
-                           delete_form=delete_form)
+                           delete_form=delete_form,
+                           image=img_path)
 
 
 @app.route('/news/<article_url>/<action>', methods=['GET', 'POST'])
@@ -429,9 +432,11 @@ def single_album_review(review_url):
 
     delete_form = AlbumReviewFormDelete()
 
+    img_path = "http://monomaniamag.com/static/reviews/" + review.photo
+
     return render_template('album-review.html', title=review.page_title,
                            review=review, side_reviews=shown_side_reviews,
-                           delete_form=delete_form)
+                           delete_form=delete_form, image=img_path)
 
 @app.route('/reviews/track/<review_url>')
 def single_track_review(review_url):
@@ -445,9 +450,11 @@ def single_track_review(review_url):
 
     delete_form = TrackReviewFormDelete()
 
+    img_path = "http://monomaniamag.com/static/reviews/" + review.photo
+
     return render_template('track-review.html', title=review.page_title,
                            review=review, side_reviews=shown_side_reviews,
-                           delete_form=delete_form)
+                           delete_form=delete_form, image=img_path)
 
 @app.route('/reviews/artist/<review_url>')
 def single_artist_review(review_url):
@@ -461,9 +468,11 @@ def single_artist_review(review_url):
 
     delete_form = ArtistReviewFormDelete()
 
+    img_path = "http://monomaniamag.com/static/reviews/" + article.photo
+
     return render_template('artist-review.html', title=review.page_title,
                            review=review, side_reviews=shown_side_reviews,
-                           delete_form=delete_form)
+                           delete_form=delete_form, image=img_path)
 
 @app.route('/reviews/album/<review_url>/<action>', methods=['GET', 'POST'])
 def album_review_action(review_url, action):
