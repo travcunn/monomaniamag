@@ -125,7 +125,7 @@
 	<div class="front-review">
     <div class="col-sm-4 col-md-2">
         <a class="thumbnail" href="{{ url_for('single_video', video_url=video.url) }}">
-            <img alt="{{ video.title }}" src="http://img.youtube.com/vi/{{ video.youtube_id }}/mqdefault.jpg">
+            <img alt="{{ video.title }}" src="http://img.youtube.com/vi/{{ video.youtube_id }}/default.jpg">
             <div class="caption">{{ video.title }}</div>
         </a>
     </div>
@@ -134,7 +134,7 @@
     {% for video in videos2.items %}
     <div class="col-sm-4 col-md-2">
         <a class="thumbnail" href="{{ url_for('single_video', video_url=video.url) }}">
-            <img alt="{{ video.title }}" src="http://img.youtube.com/vi/{{ video.youtube_id }}/mqdefault.jpg">
+            <img alt="{{ video.title }}" src="http://img.youtube.com/vi/{{ video.youtube_id }}/default.jpg">
             <div class="caption">{{ video.title }}</div>
         </a>
     </div>
