@@ -111,10 +111,14 @@
 
     </div>
 
-    <div class="col-sm-4">
-        <h2>Music Reviews</h2>
+    <div class="col-md-4">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+               <h3 class="panel-title"> <a href="{{ url_for('album_reviews') }}">Other Album Reviews</a></h3>
+            </div>
         <div class="row">
             {% for review in side_reviews.items %}
+		<div class="front-review">
             <div class="col-sm-6 side-review">
                 <a href="{{ url_for('single_album_review', review_url=review.url)}}">
                   <img class="img-responsive" src="/static/reviews/{{ review.photo }}">

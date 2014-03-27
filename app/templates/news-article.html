@@ -112,10 +112,16 @@
     </div>
 
     <div class="col-sm-4">
-        <h2>Recent Articles</h2>
+        <div class="panel panel-warning">
+            <div class="panel-heading">
+               <h3 class="panel-title"> <a href="{{ url_for('news') }}">Recent Articles</a></h3>
+            </div>
         <div class="row">
+	<!--  for article -->
+	<div class="front-review">
             {% for article in side_articles.items %}
             <div class="col-sm-6 side-review">
+		
                 <a href="{{ url_for('single_news_article', article_url=article.url)}}">
                   <img class="img-responsive" src="/static/news/{{ article.photo }}">
                 </a>
