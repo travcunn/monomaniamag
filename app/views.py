@@ -468,7 +468,7 @@ def single_artist_review(review_url):
 
     delete_form = ArtistReviewFormDelete()
 
-    img_path = "http://monomaniamag.com/static/reviews/" + article.photo
+    img_path = "http://monomaniamag.com/static/reviews/" + review.photo
 
     return render_template('artist-review.html', title=review.page_title,
                            review=review, side_reviews=shown_side_reviews,
