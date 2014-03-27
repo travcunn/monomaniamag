@@ -29,6 +29,14 @@ a.thumbnail:hover {
   color: #FFFFFF;
 }
 
+.caption {
+  white-space: nowrap;
+  width: 100%;                   
+  overflow: hidden;               
+  text-overflow:ellipsis;
+  font-size:12px;
+}
+
 .navbar-header > a {
   color: #FFFFFF;
   text-decoration: None;
@@ -173,6 +181,7 @@ a.panel-title:hover {
 .carousel-caption
 {
     text-shadow: 0 0 40px rgba(0, 0, 0, 1);
+
 }
 /* Previous button  */
 .media-carousel .carousel-control.left 
