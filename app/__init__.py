@@ -1,5 +1,4 @@
 from flask import Flask
-from flask.ext.cache import Cache
 from flask.ext.login import LoginManager
 from flask.ext.sqlalchemy import SQLAlchemy
 from werkzeug.contrib.fixers import ProxyFix
@@ -17,8 +16,7 @@ cache_config = {'CACHE_TYPE': 'RedisCache',
                 'CACHE_REDIS_HOST': '127.0.0.1',
                 'CACHE_KEY_PREFIX': 'sitecache'}
 """
-cache_config = {'CACHE_TYPE': 'simple'}
-cache = Cache(app, config=cache_config)
+
 db = SQLAlchemy(app)
 
 from momentjs import momentjs
